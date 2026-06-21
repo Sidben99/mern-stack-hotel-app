@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.env
+*.log
+.opencode/
+NEXT_TASKS.md
+ROADMAP.md
+tommorow.md

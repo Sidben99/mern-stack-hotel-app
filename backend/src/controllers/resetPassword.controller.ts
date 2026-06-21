@@ -1,0 +1,17 @@
+import { Request, Response } from "express";
+import {
+  ResetPasswordTokenType,
+  ResetPasswordDataType,
+} from "../../../shared/schemes/user/resetPasswordSchema";
+import resetPasswordResetService from "../services/resetPassword.service";
+import { successMessageResponse } from "../helpers/apiResponses";
+export default async function resetPasswordController(
+  req: Request<any, any, ResetPasswordDataType, ResetPasswordTokenType>,
+  res: Response,
+) {
+  console.log("req.body : ", req.body, " req.query : ", req.query);
+  const { token } = req.query;
+  const { password } = req.body;
+  await resetPasswordResetService(token, password);
+  return successMessageResponse(res, 200, "password reset successfully");
+}
