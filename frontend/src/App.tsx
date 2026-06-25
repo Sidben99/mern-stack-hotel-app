@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -13,15 +12,10 @@ import Index from './pages';
 import ResetPassword from './pages/auth/reset-password';
 import ErrorPage from './components/common/ErrorPage';
 import ProtectedRoute from './components/protectedRoute';
-import { refreshAccessToken } from './api/auth';
-import { useUserStore } from './store/userStore';
-import { toast } from 'sonner';
-import { FullPageLoader } from './components/ui/fullPageLoader';
-import { useQuery } from '@tanstack/react-query';
-import ApiError from '../../shared/utils/ApiError';
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout></Layout>} errorElement={<ErrorPage />}>
+      <Route index element={<Index></Index>}></Route>
       <Route path="/auth/login" element={<Login></Login>}></Route>
       <Route path="/auth/register" element={<Register></Register>}></Route>
       <Route
@@ -33,7 +27,6 @@ export const router = createBrowserRouter(
         element={<ResetPassword></ResetPassword>}
       ></Route>
       <Route element={<ProtectedRoute />}>
-        <Route index element={<Index></Index>}></Route>
         <Route path="/dashboard" element={<Index></Index>}></Route>
       </Route>
       <Route path="*" element={<ErrorPage />}></Route>

@@ -52,6 +52,12 @@ export default async function fetchWrapper<T = null>(
         }
       }
       throw fetchError;
+    } else if (fetchError instanceof TypeError) {
+      throw new ApiError(
+        0,
+        'unable to reach server , please try again',
+        ERROR_CODES.FETCH_FAILED,
+      );
     } else {
       throw new ApiError(0, 'something went wrong', ERROR_CODES.FETCH_FAILED);
     }
