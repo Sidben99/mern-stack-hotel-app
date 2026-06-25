@@ -97,7 +97,8 @@ The frontend has logic that checks for 401 ACCESS_TOKEN_EXPIRED errors. When thi
 ### Frontend Auth State
 
 - **Zustand store** (`frontend/src/store/userStore.ts`) — Holds `{ user, accessToken }` in memory.
-- **Protected Route** (`frontend/src/components/protectedRoute.tsx`) — On mount, tries to refresh the access token. If it fails, redirects to `/auth/login`. If it succeeds, updates the store and renders children.
+- **Layout** — Renders at the root level, accessible to all pages. On mount, tries to refresh the access token. If it succeeds, updates the store and renders children. If the refresh fails, the user remains anonymous — protected routes handle redirecting to login.
+- **Protected Route** (`frontend/src/components/protectedRoute.tsx`) — On mount, checks auth state. If null, redirects to `/auth/login`. If it exists, renders children.
 - **Mutation Hook** (`frontend/src/hooks/useMutationWrapper.tsx`) — Generic wrapper around TanStack Query's `useMutation` with auto toast notifications for errors and success.
 - **Fetch Wrapper** (`frontend/src/api/fetchWrapper.ts`) — Wraps `fetch()` with auto token refresh on (401 + ACCESS_TOKEN_EXPIRED), global error handling, and a 2s artificial delay (for UX testing).
 
@@ -114,7 +115,7 @@ The frontend has logic that checks for 401 ACCESS_TOKEN_EXPIRED errors. When thi
 
 | Route                       | Page                        |
 | --------------------------- | --------------------------- |
-| `/`                         | Home (protected, wip)       |
+| `/`                         | Home (public, wip)          |
 | `/auth/login`               | Login page                  |
 | `/auth/register`            | Registration page           |
 | `/auth/forget-password`     | Forgot password form        |
