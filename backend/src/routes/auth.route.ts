@@ -1,16 +1,16 @@
 import { Router } from "express";
 import registerController from "../controllers/register.controller.ts";
 import validationMiddleware from "../middlewares/validation.middleware.ts";
-import { registerSchema } from "../../../shared/schemes/user/registerSchema.ts";
-import { loginSchema } from "../../../shared/schemes/user/loginSchema.ts";
+import { registerSchema } from "@lankaStay/shared/schemes/user/registerSchema.ts";
+import { loginSchema } from "@lankaStay/shared/schemes/user/loginSchema.ts";
 import loginController from "../controllers/login.controller.ts";
 import refreshTokenController from "../controllers/refreshToken.controller.ts";
-import { forgetPasswordSchema } from "../../../shared/schemes/user/forgetPasswordSchema.ts";
+import { forgetPasswordSchema } from "@lankaStay/shared/schemes/user/forgetPasswordSchema.ts";
 import forgetPasswordController from "../controllers/forgetPassword.controller.ts";
 import {
   resetPasswordDataSchema,
   resetPasswordTokenSchema,
-} from "../../../shared/schemes/user/resetPasswordSchema.ts";
+} from "@lankaStay/shared/schemes/user/resetPasswordSchema.ts";
 import resetPasswordController from "../controllers/resetPassword.controller.ts";
 import logoutController from "../controllers/logout.controller.ts";
 export const authRouter = Router();

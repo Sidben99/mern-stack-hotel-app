@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { ERROR_CODES } from "../../../shared/consts/errorCodes";
-import ApiError from "../../../shared/utils/ApiError";
+import { ERROR_CODES } from "@lankaStay/shared/consts/errorCodes";
+import ApiError from "@lankaStay/shared/utils/ApiError";
 import refreshTokenService from "../services/refreshToken.service";
 import { successDataResponse } from "../helpers/apiResponses";
 export default async function refreshTokenController(

@@ -1,5 +1,5 @@
 import { ZodObject } from "zod";
-import { ROLES } from "../../../shared/consts/roles";
+import { ROLES } from "@lankaStay/shared/consts/roles";
 export type RefreshTokenPayload = {
   sub: string;
   role: ROLES;

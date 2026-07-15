@@ -35,7 +35,6 @@
     }
   },
   "include": [
-    "src",
-    "../shared"
+    "src"
   ]
 }

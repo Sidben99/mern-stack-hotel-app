@@ -1,8 +1,8 @@
 import { UserModel } from "../models/User.model";
-import ApiError from "../../../shared/utils/ApiError";
+import ApiError from "@lankaStay/shared/utils/ApiError";
 import { createToken } from "../helpers/createVerifyToken";
 import { getEnv } from "../conf/env.conf";
-import { ERROR_CODES } from "../../../shared/consts/errorCodes";
+import { ERROR_CODES } from "@lankaStay/shared/consts/errorCodes";
 import { sendEmail } from "../helpers/sendEmail";
 export default async function forgetPassword(email: string) {
   const envs = getEnv();

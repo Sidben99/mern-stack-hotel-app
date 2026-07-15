@@ -1,4 +1,4 @@
-import validateSchema from "../../../shared/schemes/validateSchema.ts";
+import validateSchema from "@lankaStay/shared/schemes/validateSchema.ts";
 import { Schemas } from "../types/types.ts";
 import { Request, Response, NextFunction } from "express";
 export default function validationMiddleware(schemas: Schemas) {
@@ -14,7 +14,7 @@ export default function validationMiddleware(schemas: Schemas) {
       req.body = validateSchema(schemas.body, req.body);
     }
     if (schemas.query) {
-      req.query = validateSchema(schemas.query, req.query) as any;
+      validateSchema(schemas.query, req.query) as any;
     }
     next();
   };

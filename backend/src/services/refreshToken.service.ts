@@ -1,10 +1,10 @@
-import ApiError from "../../../shared/utils/ApiError";
+import ApiError from "@lankaStay/shared/utils/ApiError";
 import { getEnv } from "../conf/env.conf";
 import { createToken, verifyToken } from "../helpers/createVerifyToken";
 import { UserModel } from "../models/User.model";
 import { RefreshTokenPayload } from "../types/types";
-import { ERROR_CODES } from "../../../shared/consts/errorCodes";
-import { UserResponseType } from "../../../shared/schemes/user/userResponseSchema";
+import { ERROR_CODES } from "@lankaStay/shared/consts/errorCodes";
+import { UserResponseType } from "@lankaStay/shared/schemes/user/userResponseSchema";
 export default async function refreshTokenService(refreshToken: string) {
   const envs = getEnv();
   const payload = verifyToken<RefreshTokenPayload>(

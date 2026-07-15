@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { errorResponse } from "../helpers/apiResponses";
-import ApiError from "../../../shared/utils/ApiError";
-import { ERROR_CODES } from "../../../shared/consts/errorCodes";
+import ApiError from "@lankaStay/shared/utils/ApiError";
+import { ERROR_CODES } from "@lankaStay/shared/consts/errorCodes";
 export default function (err, req: Request, res: Response, next) {
   console.log("error : ", err);
   if (err instanceof ApiError) {

@@ -3,10 +3,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import {
   resetPasswordNewPasswordSchema,
   type ResetPasswordNewPasswordType,
-} from '../../../../shared/schemes/user/resetPasswordSchema';
+} from '@lankaStay/shared/schemes/user/resetPasswordSchema';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { FieldLabel, FieldError, Field } from '@/components/ui/field';
+import { useSearchParams } from 'react-router-dom';
 import useResetPassword from '@/hooks/auth/useResetPassword';
 export default function ResetPassword() {
   const { register, formState, handleSubmit } =
@@ -14,12 +15,13 @@ export default function ResetPassword() {
       resolver: zodResolver(resetPasswordNewPasswordSchema),
     });
   const { isPending, mutate } = useResetPassword();
-  const token = new URLSearchParams(window.location.search).get('token') || '';
-  console.log(token);
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get('token') || '';
   return (
     <div className="max-w-[600px] mx-auto flex-1 flex flex-col justify-center">
       <h1 className="text-center text-4xl">reset password</h1>
       <form
+        noValidate
         className="py-10 px-2.5"
         onSubmit={handleSubmit((passwords: ResetPasswordNewPasswordType) => {
           const { password } = passwords;
@@ -31,7 +33,7 @@ export default function ResetPassword() {
           aria-invalid={formState.errors.password ? 'true' : 'false'}
         >
           <FieldLabel
-            htmlFor="email"
+            htmlFor="password"
             className="text-2xl capitalize font-normal"
           >
             password

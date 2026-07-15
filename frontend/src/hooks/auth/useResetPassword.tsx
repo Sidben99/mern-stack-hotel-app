@@ -2,7 +2,7 @@ import useMutationWrapper from '../useMutationWrapper';
 import type {
   ResetPasswordDataType,
   ResetPasswordTokenType,
-} from '../../../../shared/schemes/user/resetPasswordSchema.ts';
+} from '@lankaStay/shared/schemes/user/resetPasswordSchema.ts';
 
 import { resetPassword } from '@/api/auth';
 export default function useResetPassword() {

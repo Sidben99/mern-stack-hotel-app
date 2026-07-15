@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const envSchema = z.object({
   MONGODB_URI: z.string("MONGODB_URI is missing"),
+  MONGODB_URI_TEST: z.string("MONGODB_URI_TEST is missing"),
   REFRESH_TOKEN_SECRET: z.string("REFRESH_TOKEN_SECRET is missing"),
   ACCESS_TOKEN_SECRET: z.string("ACCESS_TOKEN_SECRET is missing"),
   REFRESH_TOKEN_LIFETIME: z.coerce.number(),

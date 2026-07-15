@@ -22,7 +22,7 @@ app.get("/api/test", (req: Request, res: Response) => {
 app.use("/api/", rootRouter);
 app.use("/api/auth", authRouter);
 app.use((req, res) => {
-  return res.status(404).json({ message: "not found" });
+  return res.status(404).json({ message: "route not found" });
 });
 app.use(errorHandlerMiddleware);
 export default app;

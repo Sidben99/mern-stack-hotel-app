@@ -1,13 +1,13 @@
 import mongoose from "mongoose";
 import { UserModel } from "../models/User.model";
-import { RegisterType } from "../../../shared/schemes/user/registerSchema.ts";
-import ApiError from "../../../shared/utils/ApiError";
-import { ERROR_CODES } from "../../../shared/consts/errorCodes";
+import { RegisterType } from "@lankaStay/shared/schemes/user/registerSchema.ts";
+import ApiError from "@lankaStay/shared/utils/ApiError";
+import { ERROR_CODES } from "@lankaStay/shared/consts/errorCodes";
 import { hashPassword } from "../helpers/hashComparePassword";
 import { createToken } from "../helpers/createVerifyToken";
 import { getEnv } from "../conf/env.conf.ts";
 import hashStr from "../helpers/createHash.ts";
-import { UserResponseType } from "../../../shared/schemes/user/userResponseSchema.ts";
+import { UserResponseType } from "@lankaStay/shared/schemes/user/userResponseSchema.ts";
 export default async function registerService(userInfo: RegisterType) {
   const envs = getEnv();
   const { firstName, lastName, email, password } = userInfo;

@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
-import ApiError from "../../../shared/utils/ApiError";
-import { ERROR_CODES } from "../../../shared/consts/errorCodes";
+import ApiError from "@lankaStay/shared/utils/ApiError";
+import { ERROR_CODES } from "@lankaStay/shared/consts/errorCodes";
 import type { TokenType } from "../types/types";
 const tokenErrors: Record<
   TokenType,

@@ -1,11 +1,11 @@
-import { type RegisterType } from '../../../shared/schemes/user/registerSchema.ts';
-import type { LoginType } from '../../../shared/schemes/user/loginSchema.ts';
-import type { ForgetPassword } from '../../../shared/schemes/user/forgetPasswordSchema.ts';
+import { type RegisterType } from '@lankaStay/shared/schemes/user/registerSchema.ts';
+import type { LoginType } from '@lankaStay/shared/schemes/user/loginSchema.ts';
+import type { ForgetPassword } from '@lankaStay/shared/schemes/user/forgetPasswordSchema.ts';
 import type {
   ResetPasswordDataType,
   ResetPasswordTokenType,
-} from '../../../shared/schemes/user/resetPasswordSchema.ts';
-import type { UserResponseType } from '../../../shared/schemes/user/userResponseSchema.ts';
+} from '@lankaStay/shared/schemes/user/resetPasswordSchema.ts';
+import type { UserResponseType } from '@lankaStay/shared/schemes/user/userResponseSchema.ts';
 import fetchWrapper from './fetchWrapper.ts';
 export async function register(credentials: RegisterType) {
   return fetchWrapper<{ accessToken: string; user: UserResponseType }>(

@@ -2,8 +2,8 @@ import { verifyToken } from "../helpers/createVerifyToken";
 import { getEnv } from "../conf/env.conf";
 import { UserModel } from "../models/User.model";
 import { hashPassword } from "../helpers/hashComparePassword";
-import { ERROR_CODES } from "../../../shared/consts/errorCodes";
-import ApiError from "../../../shared/utils/ApiError";
+import { ERROR_CODES } from "@lankaStay/shared/consts/errorCodes";
+import ApiError from "@lankaStay/shared/utils/ApiError";
 import type { AccessTokenPayload } from "../types/types";
 export default async function resetPasswordService(
   token: string,

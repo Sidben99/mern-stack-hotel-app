@@ -1,9 +1,9 @@
 import { Response } from "express";
-import ApiError from "../../../shared/utils/ApiError";
+import ApiError from "@lankaStay/shared/utils/ApiError";
 import type {
   ApiResponseMessage,
   ApiResponseData,
-} from "../../../shared/utils/ApiResponse";
+} from "@lankaStay/shared/utils/ApiResponse";
 
 export function successMessageResponse(
   res: Response,

@@ -3,10 +3,7 @@ import { userSchema } from "./schema";
 const registerSchema = userSchema
   .omit({ id: true, role: true })
   .extend({
-    confirmPassword: z
-      .string()
-      .min(6, "confirm password must be at least 6 characters long")
-      .max(20, "confirm password must be at most 20 characters long"),
+    confirmPassword: z.string(),
   })
   .refine(
     (data) => {
@@ -20,4 +17,5 @@ const registerSchema = userSchema
     },
   );
 type RegisterType = z.infer<typeof registerSchema>;
-export { registerSchema, RegisterType };
+export { registerSchema };
+export type { RegisterType };

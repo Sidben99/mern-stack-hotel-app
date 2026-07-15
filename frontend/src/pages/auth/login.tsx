@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import {
   loginSchema,
   type LoginType,
-} from '../../../../shared/schemes/user/loginSchema.ts';
+} from '@lankaStay/shared/schemes/user/loginSchema.ts';
 import background from '../../assets/image 5.png';
 import useLogin from '@/hooks/auth/useLogin';
 import { useUserStore } from '@/store/userStore';
@@ -28,6 +28,7 @@ export default function Login() {
         <h1 className="text-center text-4xl">Login Account</h1>
         <form
           className="py-10 px-2.5 "
+          noValidate
           onSubmit={handleSubmit((credentials) => {
             mutate(credentials, {
               onSuccess(response) {
@@ -99,7 +100,7 @@ export default function Login() {
           className="capitalize block text-center text-2xl mt-5 underline"
           to="/auth/register"
         >
-          create account
+          create an account
         </Link>
       </div>
     </div>

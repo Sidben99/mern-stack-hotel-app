@@ -1,0 +1,27 @@
+{
+  "name": "mern-booking-app",
+  "version": "1.0.0",
+  "description": "A full-stack hotel booking application built with the MERN stack (MongoDB, Express, React, Node.js).",
+  "scripts": {
+    "test:frontend": "npm run test --workspace frontend",
+    "test:backend": "npm run test --workspace backend",
+    "dev:backend": "npm run dev --workspace backend",
+    "dev:frontend": "npm run dev --workspace frontend"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sidben99/mern-stack-hotel-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "workspaces": [
+    "frontend",
+    "backend",
+    "shared"
+  ],
+  "bugs": {
+    "url": "https://github.com/Sidben99/mern-stack-hotel-app/issues"
+  },
+  "homepage": "https://github.com/Sidben99/mern-stack-hotel-app#readme"
+}

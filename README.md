@@ -4,37 +4,39 @@ A full-stack hotel booking application built with the MERN stack (MongoDB, Expre
 
 ## Tech Stack
 
-| Layer    | Technology                                                                    |
-| -------- | ----------------------------------------------------------------------------- |
-| Frontend | React 19, Vite, TypeScript , Shadcn UI, React Router , TanStack Query, Zustand       |
-| Backend  | Express 5, Mongoose 9 , MongoDB, TypeScript                                             |
-| Shared   | Zod schemas, error codes, ApiError , and types used by both frontend and backend         |
+| Layer    | Technology                                                                        |
+| -------- | --------------------------------------------------------------------------------- |
+| Frontend | React 19, Vite 7, TypeScript, Shadcn UI, React Router, TanStack Query, Zustand   |
+| Backend  | Express 5, Mongoose 9, MongoDB, TypeScript                                       |
+| Shared   | Zod schemas, error codes, ApiError, and types used by both frontend and backend   |
+| Testing  | Vitest, React Testing Library, MSW (Mock Service Worker), Supertest               |
 
 ## Project Structure
 
 ```
 mern-booking-app/
-├── backend/              # Express API server
+├── package.json              # Root workspace config + shared scripts
+├── backend/                  # Express API server
 │   └── src/
-│       ├── conf/         # Env parsing, MongoDB connection
-│       ├── controllers/  # Request handlers
-│       ├── helpers/      # Some utilities
-│       ├── middlewares/   # Auth, validation, error handler
-│       ├── models/       # Mongoose models
-│       ├── routes/       # Route definitions
-│       ├── services/     # Business logic
-│       └── types/        # Some specific backend  type definitions
-├── frontend/             # React SPA
+│       ├── conf/             # Env parsing, MongoDB connection
+│       ├── controllers/      # Request handlers
+│       ├── helpers/          # Utilities (tokens, hashing, email, responses)
+│       ├── middlewares/       # Auth, validation, error handler
+│       ├── models/           # Mongoose models
+│       ├── routes/           # Route definitions
+│       ├── services/         # Business logic
+│       └── types/            # Backend-specific type definitions
+├── frontend/                 # React SPA
 │   └── src/
-│       ├── api/          # API client functions + fetch wrapper
-│       ├── components/   # UI components (shadcn-based + some custom components)
-│       ├── hooks/        # Custom  hooks + 
-│       ├── pages/        # Route pages
-│       └── store/        # Zustand Stores
-└── shared/               # Shared code
-    ├── consts/           # Error codes, roles
-    ├── schemes/          # Zod validation schemas
-    └── utils/            # ApiError, ApiResponse types
+│       ├── api/              # API client functions + fetch wrapper
+│       ├── components/       # UI components (shadcn-based + custom)
+│       ├── hooks/            # Custom hooks
+│       ├── pages/            # Route pages
+│       └── store/            # Zustand stores
+└── shared/                   # Shared code (npm workspace)
+    ├── consts/               # Error codes, roles
+    ├── schemes/              # Zod validation schemas
+    └── utils/                # ApiError, ApiResponse types
 ```
 
 ## Getting Started
@@ -47,27 +49,49 @@ mern-booking-app/
 
 ### Installation
 
+This project uses **npm workspaces**. A single install from the root sets up all packages:
+
 ```bash
-# 1. Install dependencies for all packages
-cd backend && npm install
-cd ../frontend && npm install
-cd ../shared && npm install
+# 1. Install all dependencies (backend + frontend + shared)
+npm install
 
 # 2. Set up environment variables
 cp backend/.env.example backend/.env
+# Then edit backend/.env with your own values
 ```
 
 ### Running the App
 
 ```bash
-# Terminal 1 - Backend
-cd backend && npm run dev
+# Run both from root
+npm run dev:backend    # Terminal 1
+npm run dev:frontend   # Terminal 2
+```
 
-# Terminal 2 - Frontend
+Or from individual packages:
+
+```bash
+cd backend && npm run dev
 cd frontend && npm run dev
 ```
 
 The API runs on `http://localhost:5000` and the frontend on `http://localhost:5173`.
+
+## Testing
+
+```bash
+# Run all backend tests
+npm run test:backend
+
+# Run all frontend tests
+npm run test:frontend
+
+# Or run from inside a package
+cd backend && npm test
+cd frontend && npm test
+```
+
+Backend tests use **Supertest** against a real Express app with a test MongoDB instance. Frontend tests use **React Testing Library** with **MSW** for API mocking.
 
 ---
 
@@ -84,41 +108,40 @@ The frontend has logic that checks for 401 ACCESS_TOKEN_EXPIRED errors. When thi
 
 ### Auth Routes
 
-| Method | Endpoint                  | Description                        |
-| ------ | ------------------------- | ---------------------------------- |
-| POST   | `/api/auth/register`      | Create account + return tokens + user info     |
-| POST   | `/api/auth/login`         | Authenticate + return tokens + user info       |
-| POST   | `/api/auth/refresh-token` | Exchange refresh token for a new access token + return user info  |
-| POST   | `/api/auth/logout`        | Invalidate refresh token           |
-| POST   | `/api/auth/forget-password` | Send password reset email + token       |
-| POST   | `/api/auth/reset-password` | Reset password with token        |
-| GET    | `/api/`                   | Protected root (requires AT)       |
+| Method | Endpoint                  | Description                                          |
+| ------ | ------------------------- | ---------------------------------------------------- |
+| POST   | `/api/auth/register`      | Create account + return tokens + user info           |
+| POST   | `/api/auth/login`         | Authenticate + return tokens + user info             |
+| POST   | `/api/auth/refresh-token` | Exchange refresh token for a new access token        |
+| POST   | `/api/auth/logout`        | Invalidate refresh token                             |
+| POST   | `/api/auth/forget-password` | Send password reset email + token                 |
+| POST   | `/api/auth/reset-password` | Reset password with token                          |
+| GET    | `/api/`                   | Protected root (requires AT)                         |
 
 ### Frontend Auth State
 
 - **Zustand store** (`frontend/src/store/userStore.ts`) — Holds `{ user, accessToken }` in memory.
-- **Layout** — Renders at the root level, accessible to all pages. On mount, tries to refresh the access token. If it succeeds, updates the store and renders children. If the refresh fails, the user remains anonymous — protected routes handle redirecting to login.
+- **RefreshTokenProvider** (`frontend/src/components/refreshTokenProvider.tsx`) — Wraps protected routes. On mount, tries to refresh the access token. If it succeeds, updates the store and renders children. If the refresh fails, the user remains anonymous — protected routes handle redirecting to login.
 - **Protected Route** (`frontend/src/components/protectedRoute.tsx`) — On mount, checks auth state. If null, redirects to `/auth/login`. If it exists, renders children.
 - **Mutation Hook** (`frontend/src/hooks/useMutationWrapper.tsx`) — Generic wrapper around TanStack Query's `useMutation` with auto toast notifications for errors and success.
-- **Fetch Wrapper** (`frontend/src/api/fetchWrapper.ts`) — Wraps `fetch()` with auto token refresh on (401 + ACCESS_TOKEN_EXPIRED), global error handling, and a 2s artificial delay (for UX testing).
+- **Fetch Wrapper** (`frontend/src/api/fetchWrapper.ts`) — Wraps `fetch()` with auto token refresh on (401 + ACCESS_TOKEN_EXPIRED) and global error handling.
 
 ### Security Notes
 
 - Passwords are hashed with bcrypt (12 salt rounds).
 - Refresh tokens are stored hashed (SHA-256) in the database, not in plain text.
-- The refresh token cookie is httpOnly (not accessible via JS) , the access token is stored in memory.
+- The refresh token cookie is httpOnly (not accessible via JS), the access token is stored in memory.
 - On password reset, all existing refresh tokens are invalidated.
 
 ---
 
 ## Frontend Pages
 
-| Route                       | Page                        |
-| --------------------------- | --------------------------- |
-| `/`                         | Home (public, wip)          |
-| `/auth/login`               | Login page                  |
-| `/auth/register`            | Registration page           |
-| `/auth/forget-password`     | Forgot password form        |
-| `/auth/reset-password?token=`| Reset password form        |
-| `/dashboard`                | Dashboard (protected, wip)  |
-
+| Route                        | Page                        |
+| ---------------------------- | --------------------------- |
+| `/`                          | Home (public, wip)          |
+| `/auth/login`                | Login page                  |
+| `/auth/register`             | Registration page           |
+| `/auth/forget-password`      | Forgot password form        |
+| `/auth/reset-password?token=`| Reset password form         |
+| `/dashboard`                 | Dashboard (protected, wip)  |

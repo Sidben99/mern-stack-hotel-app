@@ -19,4 +19,5 @@ const userSchema = z.object({
   role: z.enum(ROLES),
 });
 type UserType = z.infer<typeof userSchema>;
-export { UserType, userSchema };
+export { userSchema };
+export type { UserType };

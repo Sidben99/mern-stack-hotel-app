@@ -9,7 +9,7 @@ import useRegister from '@/hooks/auth/useRegister';
 import {
   registerSchema,
   type RegisterType,
-} from '../../../../shared/schemes/user/registerSchema.ts';
+} from '@lankaStay/shared/schemes/user/registerSchema.ts';
 import background from '../../assets/image 5.png';
 import { useUserStore } from '@/store/userStore.ts';
 
@@ -17,7 +17,7 @@ export default function Register() {
   const { register, formState, handleSubmit } = useForm<RegisterType>({
     resolver: zodResolver(registerSchema),
   });
-  const { mutateAsync, isPending } = useRegister();
+  const { mutate, isPending } = useRegister();
   const setAuthState = useUserStore((state) => state.setAuthState);
   const navigate = useNavigate();
   return (
@@ -29,11 +29,16 @@ export default function Register() {
       <div className="py-5 max-w-2xs mx-auto flex flex-col justify-center">
         <h1 className="text-center text-4xl">Create Account</h1>
         <form
+          data-testid="register-form"
+          noValidate
           className="py-10 px-2.5 "
           onSubmit={handleSubmit(async (submitedUser) => {
-            const response = await mutateAsync(submitedUser);
-            setAuthState(response.data);
-            navigate('/');
+            mutate(submitedUser, {
+              onSuccess(response) {
+                setAuthState(response.data);
+                navigate('/', { replace: true });
+              },
+            });
           })}
         >
           <Field
@@ -107,7 +112,7 @@ export default function Register() {
             aria-invalid={formState.errors.password ? 'true' : 'false'}
           >
             <FieldLabel
-              htmlFor="passowrd"
+              htmlFor="password"
               className="text-2xl capitalize font-normal"
             >
               Password
@@ -132,7 +137,7 @@ export default function Register() {
               htmlFor="confirmPassowrd"
               className="text-2xl capitalize font-normal"
             >
-              Confirm Passowrd
+              Confirm Password
             </FieldLabel>
             <Input
               id="confirmPassowrd"
@@ -160,6 +165,7 @@ export default function Register() {
           <Link
             className="capitalize block text-center text-2xl mt-5 underline"
             to="/auth/login"
+            data-testid="login-link"
           >
             login
           </Link>

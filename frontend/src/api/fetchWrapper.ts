@@ -1,18 +1,17 @@
-import ApiError from '../../../shared/utils/ApiError';
-import { ERROR_CODES } from '../../../shared/consts/errorCodes';
+import ApiError from '@lankaStay/shared/utils/ApiError';
+import { ERROR_CODES } from '@lankaStay/shared/consts/errorCodes';
 import type {
   ApiResponseData,
   ApiResponseMessage,
-} from '../../../shared/utils/ApiResponse';
+} from '@lankaStay/shared/utils/ApiResponse';
 import { refreshAccessToken } from './auth';
-import { router } from '../App.tsx';
 import { useUserStore } from '@/store/userStore.ts';
 export default async function fetchWrapper<T = null>(
   url: string,
   options: RequestInit,
 ): Promise<T extends null ? ApiResponseMessage : ApiResponseData<T>> {
   try {
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    // await new Promise((resolve) => setTimeout(resolve, 2000));
     const res = await fetch(url, options);
     const data = await res.json();
     if (!res.ok) {
@@ -43,8 +42,7 @@ export default async function fetchWrapper<T = null>(
               refetchError.code === ERROR_CODES.INVALID_REFRESH_TOKEN ||
               refetchError.code === ERROR_CODES.UNAUTHORIZED
             ) {
-              router.navigate('/auth/login');
-              useUserStore.setState({ authState: null });
+              window.location.href = '/auth/login';
             }
           }
 

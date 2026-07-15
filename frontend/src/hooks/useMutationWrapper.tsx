@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import type { ApiResponse } from '../../../shared/utils/ApiResponse';
-import ApiError from '../../../shared/utils/ApiError';
+import type { ApiResponse } from '@lankaStay/shared/utils/ApiResponse';
+import ApiError from '@lankaStay/shared/utils/ApiError';
 export default function useMutationWrapper<A = unknown, T = null>(
   mutationFunction: (args: A) => Promise<ApiResponse<T>>,
   showSuccessToast = true,

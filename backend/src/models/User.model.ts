@@ -1,5 +1,5 @@
 import { model, Schema, InferSchemaType } from "mongoose";
-import { ROLES } from "../../../shared/consts/roles";
+import { ROLES } from "@lankaStay/shared/consts/roles";
 
 const userSchema = new Schema(
   {

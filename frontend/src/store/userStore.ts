@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { type UserResponseType } from '../../../shared/schemes/user/userResponseSchema.ts';
+import { type UserResponseType } from '@lankaStay/shared/schemes/user/userResponseSchema.ts';
 type AuthState = {
   user: UserResponseType;
   accessToken: string;

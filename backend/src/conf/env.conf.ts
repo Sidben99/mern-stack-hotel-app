@@ -1,4 +1,4 @@
-import { envSchema, EnvSchema } from "../../../shared/schemes/envSchema";
+import { envSchema, EnvSchema } from "@lankaStay/shared/schemes/envSchema";
 let parsedEnv: EnvSchema;
 export function initEnv() {
   parsedEnv = envSchema.parse(process.env);
