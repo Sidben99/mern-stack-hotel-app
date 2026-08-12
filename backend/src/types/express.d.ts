@@ -4,5 +4,10 @@ declare global {
     interface Request {
       user?: AccessTokenPayload;
     }
+    interface Response {
+      locals: {
+        validatedQuery: Record<string, unknown>;
+      };
+    }
   }
 }

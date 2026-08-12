@@ -14,7 +14,10 @@ export default function validationMiddleware(schemas: Schemas) {
       req.body = validateSchema(schemas.body, req.body);
     }
     if (schemas.query) {
-      validateSchema(schemas.query, req.query) as any;
+      res.locals.validatedQuery = validateSchema(
+        schemas.query,
+        req.query,
+      ) as any;
     }
     next();
   };
