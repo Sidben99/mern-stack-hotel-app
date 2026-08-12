@@ -11,6 +11,7 @@ export default function useMutationWrapper<A = unknown, T = null>(
     isPending,
     mutate,
     mutateAsync,
+    isSuccess,
   } = useMutation<ApiResponse<T>, ApiError, A>({
     mutationFn: mutationFunction,
     onError: (error) => {
@@ -40,5 +41,6 @@ export default function useMutationWrapper<A = unknown, T = null>(
     isPending,
     mutate,
     mutateAsync,
+    isSuccess,
   };
 }

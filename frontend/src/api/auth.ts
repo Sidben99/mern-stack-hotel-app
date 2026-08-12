@@ -14,6 +14,7 @@ export async function register(credentials: RegisterType) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(credentials),
+      credentials: 'include',
     },
   );
 }
@@ -57,6 +58,7 @@ export async function resetPassword(
 export async function logout() {
   return fetchWrapper('http://localhost:5000/api/auth/logout', {
     method: 'POST',
+    credentials: 'include',
   });
 }
 export async function refreshAccessToken() {
