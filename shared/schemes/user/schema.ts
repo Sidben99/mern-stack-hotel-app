@@ -17,6 +17,7 @@ const userSchema = z.object({
     .min(6, "password must be at least 6 characters long")
     .max(20, "password must be at most 20 characters long"),
   role: z.enum(ROLES),
+  avatar: z.string().optional(),
 });
 type UserType = z.infer<typeof userSchema>;
 export { userSchema };
