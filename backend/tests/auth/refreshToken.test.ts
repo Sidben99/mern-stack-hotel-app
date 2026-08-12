@@ -6,7 +6,10 @@ import { ApiResponse } from "@lankaStay/shared/utils/ApiResponse.ts";
 import { UserResponseType } from "@lankaStay/shared/schemes/user/userResponseSchema.ts";
 import { createToken } from "../../src/helpers/createVerifyToken.ts";
 import { getEnv } from "../../src/conf/env.conf.ts";
+import { registerTestUser } from "./helper.ts";
 const api = supertest.agent(app);
+
+const envs = getEnv();
 describe("POST /api/auth/refresh-token", () => {
   it("should return 401 when no token is provided", async () => {
     const response = await api.post("/api/auth/refresh-token");
@@ -15,7 +18,6 @@ describe("POST /api/auth/refresh-token", () => {
     expect(responseBody.message).toBe("unauthorized user");
   });
   it("should return 401 when token is expired", async () => {
-    const envs = getEnv();
     const token = createToken({}, envs.REFRESH_TOKEN_SECRET, 0);
     const response = await api
       .post("/api/auth/refresh-token")
@@ -24,7 +26,7 @@ describe("POST /api/auth/refresh-token", () => {
     expect(response.body.message).toBe("token expired");
   });
   it("should return 401 when token is invalid", async () => {
-    const envs = getEnv();
+    // const envs = getEnv();
     const token = createToken({}, "secret", envs.REFRESH_TOKEN_LIFETIME);
     const response = await api
       .post("/api/auth/refresh-token")
@@ -33,14 +35,7 @@ describe("POST /api/auth/refresh-token", () => {
     expect(response.body.message).toBe("invalid token");
   });
   it("should return 201 when refreshing a valid token", async () => {
-    const registerBody: RegisterType = {
-      email: "cookietest@example.com",
-      password: "password",
-      firstName: "Cookie",
-      lastName: "Test",
-      confirmPassword: "password",
-    };
-    await api.post("/api/auth/register").send(registerBody);
+    await registerTestUser(api);
     const refreshRes = await api.post("/api/auth/refresh-token");
     const refreshResBody = refreshRes.body as ApiResponse<{
       user: UserResponseType;
