@@ -7,8 +7,6 @@ const registerSchema = userSchema
   })
   .refine(
     (data) => {
-      console.log("password : ", data.password);
-      console.log("confirmPassword : ", data.confirmPassword);
       return data.password === data.confirmPassword;
     },
     {

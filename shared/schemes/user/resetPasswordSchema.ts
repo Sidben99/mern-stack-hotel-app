@@ -11,15 +11,10 @@ export const resetPasswordNewPasswordSchema = userSchema
     password: true,
   })
   .extend({
-    confirmPassword: z
-      .string()
-      .min(6, "confirm password must be at least 6 characters long")
-      .max(20, "confirm password must be at most 20 characters long"),
+    confirmPassword: z.string(),
   })
   .refine(
     (data) => {
-      console.log("password : ", data.password);
-      console.log("confirmPassword : ", data.confirmPassword);
       return data.password === data.confirmPassword;
     },
     {
