@@ -72,6 +72,9 @@ export const handlers = [
       });
     }
   }),
+  http.post('http://localhost:5000/api/auth/logout', () =>
+    HttpResponse.json({ message: 'logged out successfully' }),
+  ),
   http.post(
     'http://localhost:5000/api/auth/reset-password',
     async ({ request }) => {

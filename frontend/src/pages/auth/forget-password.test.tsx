@@ -2,7 +2,7 @@ import { expect, describe, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import RenderScreen from '@/test/renderScreen';
-describe('forgetPassword page', { skip: true }, () => {
+describe('forgetPassword page', () => {
   it('should show an error for invalid email', async () => {
     // ARRANGE
     const user = userEvent.setup();

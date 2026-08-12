@@ -95,7 +95,7 @@ describe('register page', () => {
     const loginLink = await screen.findByTestId('login-link');
     // ACT
     await user.click(loginLink);
-    const loginHeader = await screen.findByText(/login/);
+    const loginHeader = await screen.findByText(/Login Account/i);
     // ASSERT
     expect(loginHeader).toBeInTheDocument();
   });

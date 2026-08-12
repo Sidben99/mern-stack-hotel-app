@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import RenderScreen from '@/test/renderScreen';
 import { useUserStore } from '@/store/userStore';
-describe('login page', { skip: true }, () => {
+describe('login page', () => {
   it('should show an error for invalid email and invalid password', async () => {
     // ARRANGE
     const user = userEvent.setup();
