@@ -62,6 +62,7 @@ export default async function registerService(userInfo: RegisterType) {
     lastName: newUser.lastName,
     email: newUser.email,
     role: newUser.role,
+    avatar: newUser.avatar,
   };
   return { user: userResponseDto, accessToken, refreshToken };
 }

@@ -25,7 +25,13 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
-
+    avatar: {
+      type: String,
+      required: true,
+      default: function () {
+        return `https://api.dicebear.com/10.x/initials/svg?seed=${this.firstName}`;
+      },
+    },
     tokens: [
       {
         _id: Schema.Types.ObjectId,
@@ -38,10 +44,7 @@ const userSchema = new Schema(
           required: true,
           default: Date.now,
         },
-        expiresAt: {
-          type: Date,
-          required: true,
-        },
+        expiresAt: { type: Date, required: true },
       },
     ],
     resetPasswordToken: {
@@ -51,6 +54,7 @@ const userSchema = new Schema(
 
   { timestamps: true },
 );
+
 export type IUser = InferSchemaType<typeof userSchema>;
 
 export const UserModel = model("User", userSchema);

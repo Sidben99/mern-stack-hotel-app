@@ -33,6 +33,7 @@ export default async function refreshTokenService(refreshToken: string) {
     lastName: user.lastName,
     email: user.email,
     role: user.role,
+    avatar: user.avatar,
   };
 
   return { user: userResponseDto, accessToken };

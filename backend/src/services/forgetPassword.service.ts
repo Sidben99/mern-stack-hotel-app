@@ -15,7 +15,7 @@ export default async function forgetPassword(email: string) {
   );
   await sendEmail(
     email,
-    "Reset Passowrd",
+    "Reset password",
     `your reset password link is http://localhost:5173/auth/reset-password?token=${token}`,
     `this is your reset password link <a href="http://localhost:5173/auth/reset-password?token=${token}">reset password</a>`,
   );

@@ -65,6 +65,7 @@ export default async function loginService(credentials: LoginType) {
     lastName: user.lastName,
     email: user.email,
     role: user.role,
+    avatar: user.avatar,
   };
   return { user: userResponseDto, accessToken, refreshToken };
 }
