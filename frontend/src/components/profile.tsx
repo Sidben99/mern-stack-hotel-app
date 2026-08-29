@@ -11,7 +11,7 @@ export default function Profile({
   return (
     <div className=" flex justify-center items-center gap-2.5">
       <AvatarImg src={user.avatar} alt="avatar"></AvatarImg>
-      <span className="text-sm">{`${user.firstName} ${user.lastName}`}</span>
+      <span className="text-sm">{user.username}</span>
       {isOpen ? (
         <ChevronUp width={20} height={20}></ChevronUp>
       ) : (

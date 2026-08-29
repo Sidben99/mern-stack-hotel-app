@@ -1,4 +1,4 @@
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, useNavigate } from 'react-router-dom';
 import { Field, FieldLabel, FieldError } from '@/components/ui/field';
@@ -7,14 +7,24 @@ import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import useRegister from '@/hooks/auth/useRegister';
 import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectGroup,
+  SelectItem,
+  SelectContent,
+} from '@/components/ui/select';
+import {
   registerSchema,
   type RegisterType,
 } from '@lankaStay/shared/schemes/user/registerSchema.ts';
+import { countriesEntries } from '@lankaStay/shared/consts/countries';
 import background from '../../assets/image 5.png';
 import { useUserStore } from '@/store/userStore.ts';
-
+import PhoneInput from 'react-phone-number-input';
+import 'react-phone-number-input/style.css';
 export default function Register() {
-  const { register, formState, handleSubmit } = useForm<RegisterType>({
+  const { register, control, formState, handleSubmit } = useForm<RegisterType>({
     resolver: zodResolver(registerSchema),
   });
   const { mutate, isPending } = useRegister();
@@ -32,7 +42,7 @@ export default function Register() {
           data-testid="register-form"
           noValidate
           className="py-10 px-2.5 "
-          onSubmit={handleSubmit(async (submitedUser) => {
+          onSubmit={handleSubmit((submitedUser) => {
             mutate(submitedUser, {
               onSuccess(response) {
                 setAuthState(response.data);
@@ -43,46 +53,24 @@ export default function Register() {
         >
           <Field
             className="py-2.5"
-            aria-invalid={formState.errors.firstName ? 'true' : 'false'}
+            aria-invalid={formState.errors.username ? 'true' : 'false'}
           >
             <FieldLabel
-              htmlFor="firstname"
+              htmlFor="username"
               className="text-2xl capitalize font-normal"
             >
-              First Name
+              Username
             </FieldLabel>
             <Input
-              id="firstname"
+              id="username"
               type="text"
-              placeholder="enter you first name"
+              placeholder="enter your username"
               sz="lg"
-              aria-invalid={formState.errors.firstName ? 'true' : 'false'}
-              {...register('firstName')}
+              aria-invalid={formState.errors.username ? 'true' : 'false'}
+              {...register('username')}
             />
-            {formState.errors.firstName && (
-              <FieldError>{formState.errors.firstName.message}</FieldError>
-            )}
-          </Field>
-          <Field
-            className="py-2.5"
-            aria-invalid={formState.errors.lastName ? 'true' : 'false'}
-          >
-            <FieldLabel
-              htmlFor="lastname"
-              className="text-2xl capitalize font-normal"
-            >
-              Last Name
-            </FieldLabel>
-            <Input
-              id="lastname"
-              type="text"
-              sz="lg"
-              placeholder="enter you last name"
-              aria-invalid={formState.errors.lastName ? 'true' : 'false'}
-              {...register('lastName')}
-            />
-            {formState.errors.lastName && (
-              <FieldError>{formState.errors.lastName.message}</FieldError>
+            {formState.errors.username && (
+              <FieldError>{formState.errors.username.message}</FieldError>
             )}
           </Field>
           <Field
@@ -107,6 +95,70 @@ export default function Register() {
               <FieldError>{formState.errors.email.message}</FieldError>
             )}
           </Field>
+          <Controller
+            control={control}
+            name="nationality"
+            render={({ field, fieldState }) => (
+              <Field
+                className="py-2.5"
+                aria-invalid={fieldState.invalid ? 'true' : 'false'}
+              >
+                <FieldLabel
+                  htmlFor="nationality"
+                  className="text-2xl capitalize font-normal"
+                >
+                  Nationality
+                </FieldLabel>
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <SelectTrigger
+                    id="nationality"
+                    aria-invalid={fieldState.invalid ? 'true' : 'false'}
+                  >
+                    <SelectValue placeholder="Select nationality" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {countriesEntries.map(([code, name]) => (
+                        <SelectItem key={code} value={code}>
+                          {name}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+                {fieldState.error && (
+                  <FieldError>{fieldState.error.message}</FieldError>
+                )}
+              </Field>
+            )}
+          />
+          <Controller
+            control={control}
+            name="phoneNumber"
+            render={({ field, fieldState }) => (
+              <Field
+                className="py-2.5"
+                aria-invalid={fieldState.invalid ? 'true' : 'false'}
+              >
+                <FieldLabel
+                  htmlFor="phoneNumber"
+
+                  className="text-2xl capitalize font-normal"
+                >
+                  Phone Number
+                </FieldLabel>
+                <PhoneInput
+                  id="phoneNumber"
+                  onChange={field.onChange}
+                  value={field.value}
+                  inputComponent={Input}
+                ></PhoneInput>
+                {fieldState.error && (
+                  <FieldError>{fieldState.error.message}</FieldError>
+                )}
+              </Field>
+            )}
+          />
           <Field
             className="py-2.5"
             aria-invalid={formState.errors.password ? 'true' : 'false'}
@@ -129,6 +181,7 @@ export default function Register() {
               <FieldError>{formState.errors.password.message}</FieldError>
             )}
           </Field>
+
           <Field
             className="py-2.5"
             aria-invalid={formState.errors.confirmPassword ? 'true' : 'false'}

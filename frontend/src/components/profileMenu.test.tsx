@@ -8,11 +8,12 @@ import { useUserStore } from '@/store/userStore';
 const seededAuthState = {
   user: {
     id: '1',
-    firstName: 'some',
-    lastName: 'user',
+    username: 'some user',
     email: 'some@mail.com',
     role: 'user' as const,
     avatar: '',
+    phoneNumber: '0771234567',
+    nationality: 'LK',
   },
   accessToken: 'token',
 };

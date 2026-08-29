@@ -44,7 +44,7 @@ export const handlers = [
         message: 'User logged in successfully',
         data: {
           accessToken: 'token',
-          user: { firstName: 'some user' },
+          user: { username: 'some user' },
         },
       });
     }
@@ -67,7 +67,7 @@ export const handlers = [
         message: 'User registered',
         data: {
           accessToken: 'token',
-          user: { firstName: 'some user' },
+          user: { username: 'some user' },
         },
       });
     }
