@@ -1,10 +1,12 @@
-import app from "./app";
-import connectToDatabase from "./conf/mongodbConnection.conf";
+import app from "@/app";
+import connectToDatabase from "@/conf/mongodbConnection.conf";
 const PORT = process.env.PORT || 5000;
-import { initEnv } from "./conf/env.conf";
+import { initEnv } from "@/conf/env.conf";
+import initCloudinary from "@/conf/cloudinary.conf";
 async function startServer() {
   try {
     initEnv();
+    initCloudinary();
     await connectToDatabase();
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);

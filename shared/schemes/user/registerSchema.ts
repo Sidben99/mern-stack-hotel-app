@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { userSchema } from "./schema";
 const registerSchema = userSchema
-  .omit({ id: true, role: true })
+  .omit({ role: true, avatar: true, ownerInfo: true })
   .extend({
     confirmPassword: z.string(),
   })

@@ -11,6 +11,9 @@ export const envSchema = z.object({
   SMTP_PORT: z.string("SMTP_PORT is missing"),
   MAILTRAP_USERNAME: z.string("MAILTRAP_USERNAME is missing"),
   MAILTRAP_PASSWORD: z.string("MAILTRAP_PASSWORD is missing"),
+  CLOUDINARY_NAME: z.string("CLOUDINARY_NAME is missing"),
+  CLOUDINARY_API_KEY: z.string("CLOUDINARY_API_KEY is missing"),
+  CLOUDINARY_API_SECRET: z.string("CLOUDINARY_API_SECRET is missing"),
 });
 
 export type EnvSchema = z.infer<typeof envSchema>;

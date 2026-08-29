@@ -1,8 +1,8 @@
 import ApiError from "@lankaStay/shared/utils/ApiError";
-import { getEnv } from "../conf/env.conf";
-import { createToken, verifyToken } from "../helpers/createVerifyToken";
-import { UserModel } from "../models/User.model";
-import { RefreshTokenPayload } from "../types/types";
+import { getEnv } from "@/conf/env.conf";
+import { createToken, verifyToken } from "@/helpers/createVerifyToken";
+import { UserModel } from "@/models/User.model";
+import { RefreshTokenPayload } from "@/types/types";
 import { ERROR_CODES } from "@lankaStay/shared/consts/errorCodes";
 import { UserResponseType } from "@lankaStay/shared/schemes/user/userResponseSchema";
 export default async function refreshTokenService(refreshToken: string) {
@@ -29,11 +29,11 @@ export default async function refreshTokenService(refreshToken: string) {
   );
   const userResponseDto: UserResponseType = {
     id: user._id.toString(),
-    firstName: user.firstName,
-    lastName: user.lastName,
+    username: user.username,
     email: user.email,
     role: user.role,
     avatar: user.avatar,
+    nationality: user.nationality,
   };
 
   return { user: userResponseDto, accessToken };

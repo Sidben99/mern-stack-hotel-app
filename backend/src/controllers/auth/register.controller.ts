@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { RegisterType } from "@lankaStay/shared/schemes/user/registerSchema.ts";
-import { successDataResponse } from "../helpers/apiResponses";
-import registerService from "../services/register.service";
-import { getEnv } from "../conf/env.conf";
+import { RegisterType } from "@lankaStay/shared/schemes/user/registerSchema";
+import { successDataResponse } from "@/helpers/apiResponses";
+import registerService from "@/services/auth/register.service";
+import { getEnv } from "@/conf/env.conf";
 import { UserResponseType } from "@lankaStay/shared/schemes/user/userResponseSchema";
 export default async function registerController(
   req: Request<any, any, RegisterType, any>,

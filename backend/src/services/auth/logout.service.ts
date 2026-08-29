@@ -1,6 +1,6 @@
-import { getEnv } from "../conf/env.conf";
-import { UserModel } from "../models/User.model";
-import { RefreshTokenPayload } from "../types/types";
+import { getEnv } from "@/conf/env.conf";
+import { UserModel } from "@/models/User.model";
+import { RefreshTokenPayload } from "@/types/types";
 import jwt from "jsonwebtoken";
 export default async function logoutService(refreshToken: string) {
   const envs = getEnv();

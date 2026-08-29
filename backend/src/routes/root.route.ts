@@ -1,5 +1,5 @@
 import { Router } from "express";
-import authenticateMiddleware from "../middlewares/authenticate.middleware";
+import authenticateMiddleware from "@/middlewares/authenticate.middleware";
 const rootRouter = Router();
 /**
  * HEADERS:  Authorization: Bearer <token>

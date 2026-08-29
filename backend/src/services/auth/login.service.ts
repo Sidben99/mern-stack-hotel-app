@@ -1,14 +1,16 @@
 import mongoose from "mongoose";
-import { UserModel } from "../models/User.model";
-import { LoginType } from "@lankaStay/shared/schemes/user/loginSchema.ts";
+import { UserModel } from "@/models/User.model";
+import { LoginType } from "@lankaStay/shared/schemes/user/loginSchema";
 import ApiError from "@lankaStay/shared/utils/ApiError";
 import { ERROR_CODES } from "@lankaStay/shared/consts/errorCodes";
-import { comparePassword } from "../helpers/hashComparePassword";
-import { createToken } from "../helpers/createVerifyToken";
-import { getEnv } from "../conf/env.conf";
-import hashStr from "../helpers/createHash";
-import { AccessTokenPayload, RefreshTokenPayload } from "../types/types";
-import { UserResponseType } from "@lankaStay/shared/schemes/user/userResponseSchema.ts";
+import { comparePassword } from "@/helpers/hashComparePassword";
+import { createToken } from "@/helpers/createVerifyToken";
+import { getEnv } from "@/conf/env.conf";
+import hashStr from "@/helpers/createHash";
+import { AccessTokenPayload, RefreshTokenPayload } from "@/types/types";
+import { UserResponseType } from "@lankaStay/shared/schemes/user/userResponseSchema";
+import { ROLES } from "@lankaStay/shared/consts/roles";
+import { type OwnerResponseType } from "@lankaStay/shared/schemes/owner/ownerResponseSchema";
 export default async function loginService(credentials: LoginType) {
   const envs = getEnv();
   const { email, password } = credentials;
@@ -22,6 +24,7 @@ export default async function loginService(credentials: LoginType) {
       "invalid credentials",
       ERROR_CODES.INVALID_CREDENTIALS,
     );
+
   // check if password is correct
   const passwordsMatch = await comparePassword(password, user.password);
   if (!passwordsMatch)
@@ -59,13 +62,20 @@ export default async function loginService(credentials: LoginType) {
   });
   // save user
   await user.save();
-  const userResponseDto: UserResponseType = {
+  const baseUser = {
     id: user._id.toString(),
-    firstName: user.firstName,
-    lastName: user.lastName,
+    username: user.username,
     email: user.email,
     role: user.role,
     avatar: user.avatar,
+    nationality: user.nationality,
+    phoneNumber: user.phoneNumber,
   };
+
+  const userResponseDto: UserResponseType | OwnerResponseType =
+    user.role === ROLES.OWNER
+      ? { ...baseUser, role: ROLES.OWNER, ownerInfo: user.ownerInfo }
+      : { ...baseUser, role: user.role };
+
   return { user: userResponseDto, accessToken, refreshToken };
 }

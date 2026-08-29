@@ -1,8 +1,13 @@
-import { Request, Response } from "express";
-import { errorResponse } from "../helpers/apiResponses";
+import { Request, Response, NextFunction } from "express";
+import { errorResponse } from "@/helpers/apiResponses";
 import ApiError from "@lankaStay/shared/utils/ApiError";
 import { ERROR_CODES } from "@lankaStay/shared/consts/errorCodes";
-export default function (err, req: Request, res: Response, next) {
+export default function errorHandler(
+  err: Error,
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
   console.log("error : ", err);
   if (err instanceof ApiError) {
     return errorResponse(res, err);

@@ -1,5 +1,5 @@
 import { createTransport } from "nodemailer";
-import { getEnv } from "../conf/env.conf";
+import { getEnv } from "@/conf/env.conf";
 export async function sendEmail(
   email: string,
   subject: string,

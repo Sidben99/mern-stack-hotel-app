@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { LoginType } from "@lankaStay/shared/schemes/user/loginSchema.ts";
-import { successDataResponse } from "../helpers/apiResponses";
-import { getEnv } from "../conf/env.conf";
-import loginService from "../services/login.service";
+import { LoginType } from "@lankaStay/shared/schemes/user/loginSchema";
+import { successDataResponse } from "@/helpers/apiResponses";
+import { getEnv } from "@/conf/env.conf";
+import loginService from "@/services/auth/login.service";
 import { UserResponseType } from "@lankaStay/shared/schemes/user/userResponseSchema";
 export default async function loginController(
   req: Request<any, any, LoginType, any>,

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import forgetPasswordService from "../services/forgetPassword.service.ts";
-import { successMessageResponse } from "../helpers/apiResponses";
-import { ForgetPassword } from "@lankaStay/shared/schemes/user/forgetPasswordSchema.ts";
+import forgetPasswordService from "@/services/auth/forgetPassword.service";
+import { successMessageResponse } from "@/helpers/apiResponses";
+import { ForgetPassword } from "@lankaStay/shared/schemes/user/forgetPasswordSchema";
 export default async function forgetPasswordController(
   req: Request<any, any, ForgetPassword, any>,
   res: Response,

@@ -1,17 +1,16 @@
 import { RegisterType } from "@lankaStay/shared/schemes/user/registerSchema";
-import supertest, { SuperTest } from "supertest";
-import TestAgent from "supertest/lib/agent";
 import { ApiResponse } from "@lankaStay/shared/utils/ApiResponse";
 import { UserResponseType } from "@lankaStay/shared/schemes/user/userResponseSchema";
 import { Response } from "supertest";
 export async function registerTestUser(api, user: Partial<RegisterType> = {}) {
   try {
     const newUser: RegisterType = {
-      firstName: user.firstName || "John",
-      lastName: user.lastName || "Doe",
+      username: user.username || "JohnDoe",
       email: user.email || `deo-${Date.now()}@example.com`,
       password: user.password || "password",
       confirmPassword: user.confirmPassword || "password",
+      nationality: user.nationality || "US",
+      phoneNumber: user.phoneNumber || "+19725550123",
     };
     const registerResponse = (await api
       .post("/api/auth/register")

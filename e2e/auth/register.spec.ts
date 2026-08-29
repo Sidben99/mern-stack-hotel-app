@@ -1,13 +1,14 @@
 import { test, expect, Page } from "@playwright/test";
-import { registerTestUser } from "./helpers";
-import { registerAction } from "./helpers";
+import { registerTestUser } from "../helpers";
+import { registerAction } from "../helpers";
 const newUser = {
-  firstName: "John",
-  lastName: "Doe",
+  username: "JohnDoe",
   email: `doe-${Date.now()}@example.com`,
   password: "password",
   confirmPassword: "password",
-};
+  nationality: "US",
+  phoneNumber: "+19725550123",
+} as const;
 const duplicateUser = {
   email: `duplicate-${Date.now()}@mail.com`,
 };
@@ -39,21 +40,30 @@ test.describe("testing the register page", () => {
     page,
   }) => {
     await registerAction(page, {
-      firstName: "",
-      lastName: "",
+      username: "",
       email: "notfound.com",
       password: "password",
-      confirmPassword: "otherPassowrd",
+      confirmPassword: "password",
+      nationality: "US",
+      phoneNumber: "+19725550123",
     });
 
     await expect(
-      page.getByText(/first name must be at least 2 characters /),
+      page.getByText(/username must be at least 2 characters /),
     ).toBeVisible();
 
-    await expect(
-      page.getByText(/last name must be at least 2 characters /),
-    ).toBeVisible();
     await expect(page.getByText(/invalid email address/)).toBeVisible();
+  });
+
+  test("show password mismatch error when only passwords differ", async ({
+    page,
+  }) => {
+    await registerAction(page, {
+      ...newUser,
+      confirmPassword: "differentPassword",
+      email: `mismatch-${Date.now()}@example.com`,
+    });
+
     await expect(page.getByText(/passwords don't match/)).toBeVisible();
   });
 });

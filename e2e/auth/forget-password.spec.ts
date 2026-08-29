@@ -1,5 +1,5 @@
 import { test, expect, Page } from "@playwright/test";
-import { registerTestUser } from "./helpers";
+import { registerTestUser } from "../helpers";
 import { ForgetPassword } from "@lankaStay/shared/schemes/user/forgetPasswordSchema";
 const newUser = {
   email: `doe-${Date.now()}@example.com`,

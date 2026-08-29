@@ -1,14 +1,15 @@
 import { test, expect, Page } from "@playwright/test";
-import { registerAction } from "./helpers";
+import { registerAction } from "../helpers";
 const newUser = {
-  firstName: "John",
-  lastName: "Doe",
+  username: "JohnDoe",
   email: `doe-${Date.now()}@example.com`,
   password: "password",
   confirmPassword: "password",
-};
+  nationality: "US",
+  phoneNumber: "+19725550123",
+} as const;
 async function logoutAction(page: Page) {
-  await page.getByText(/john doe/i).click();
+  await page.getByRole("button", { name: /avatar johndoe/i }).click();
   await page.getByText("log out").click();
 }
 test.describe("testing the logout feature", () => {

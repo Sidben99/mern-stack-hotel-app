@@ -1,5 +1,5 @@
 import { test, expect, Page } from "@playwright/test";
-import { registerTestUser } from "./helpers";
+import { registerTestUser } from "../helpers";
 import jwt from "jsonwebtoken";
 import { ResetPasswordNewPasswordType } from "@lankaStay/shared/schemes/user/resetPasswordSchema";
 let token = "";

@@ -1,16 +1,16 @@
 import mongoose from "mongoose";
-import { UserModel } from "../models/User.model";
-import { RegisterType } from "@lankaStay/shared/schemes/user/registerSchema.ts";
+import { UserModel } from "@/models/User.model";
+import { RegisterType } from "@lankaStay/shared/schemes/user/registerSchema";
 import ApiError from "@lankaStay/shared/utils/ApiError";
 import { ERROR_CODES } from "@lankaStay/shared/consts/errorCodes";
-import { hashPassword } from "../helpers/hashComparePassword";
-import { createToken } from "../helpers/createVerifyToken";
-import { getEnv } from "../conf/env.conf.ts";
-import hashStr from "../helpers/createHash.ts";
-import { UserResponseType } from "@lankaStay/shared/schemes/user/userResponseSchema.ts";
+import { hashPassword } from "@/helpers/hashComparePassword";
+import { createToken } from "@/helpers/createVerifyToken";
+import { getEnv } from "@/conf/env.conf";
+import hashStr from "@/helpers/createHash";
+import { UserResponseType } from "@lankaStay/shared/schemes/user/userResponseSchema";
 export default async function registerService(userInfo: RegisterType) {
   const envs = getEnv();
-  const { firstName, lastName, email, password } = userInfo;
+  const { email, password } = userInfo;
   // check if email already exists
   const existingEmail = await UserModel.findOne({ email });
   if (existingEmail)
@@ -22,9 +22,7 @@ export default async function registerService(userInfo: RegisterType) {
   // hash password
   const hashedPassword = await hashPassword(password);
   const newUser = await UserModel.create({
-    firstName,
-    lastName,
-    email,
+    ...userInfo,
     password: hashedPassword,
   });
   // create access and refresh token
@@ -58,11 +56,11 @@ export default async function registerService(userInfo: RegisterType) {
   await newUser.save();
   const userResponseDto: UserResponseType = {
     id: newUser._id.toString(),
-    firstName: newUser.firstName,
-    lastName: newUser.lastName,
+    username: newUser.username,
     email: newUser.email,
     role: newUser.role,
     avatar: newUser.avatar,
+    nationality: newUser.nationality,
   };
   return { user: userResponseDto, accessToken, refreshToken };
 }

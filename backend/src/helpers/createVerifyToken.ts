@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import ApiError from "@lankaStay/shared/utils/ApiError";
 import { ERROR_CODES } from "@lankaStay/shared/consts/errorCodes";
-import type { TokenType } from "../types/types";
+import type { TokenType } from "@/types/types";
 const tokenErrors: Record<
   TokenType,
   Record<"invalid" | "expired", ERROR_CODES>
@@ -34,7 +34,7 @@ export function verifyToken<T>(
   try {
     const payload = jwt.verify(token, secret) as T;
     return payload;
-  } catch (err) {
+  } catch (err: any) {
     if (err.name === "TokenExpiredError") {
       throw new ApiError(401, "token expired", tokenErrors[tokenType].expired);
     }

@@ -1,5 +1,5 @@
-import validateSchema from "@lankaStay/shared/schemes/validateSchema.ts";
-import { Schemas } from "../types/types.ts";
+import validateSchema from "@lankaStay/shared/schemes/validateSchema";
+import { Schemas } from "@/types/types";
 import { Request, Response, NextFunction } from "express";
 export default function validationMiddleware(schemas: Schemas) {
   return (req: Request, res: Response, next: NextFunction) => {

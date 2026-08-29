@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import ApiError from "@lankaStay/shared/utils/ApiError";
 import { ERROR_CODES } from "@lankaStay/shared/consts/errorCodes";
-import { verifyToken } from "../helpers/createVerifyToken";
-import { AccessTokenPayload } from "../types/types";
-import { getEnv } from "../conf/env.conf";
+import { verifyToken } from "@/helpers/createVerifyToken";
+import { AccessTokenPayload } from "@/types/types";
+import { getEnv } from "@/conf/env.conf";
 export default function authenticateMiddleware(
   req: Request,
   res: Response,
