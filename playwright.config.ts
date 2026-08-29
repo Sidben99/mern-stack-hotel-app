@@ -73,7 +73,7 @@ export default defineConfig({
     {
       command: "npm run dev --workspace backend",
       url: "http://localhost:5000/api/health",
-      // reuseExistingServer: !process.env.CI,
+      reuseExistingServer: !process.env.CI,
       env: { MONGODB_URI: process.env.MONGODB_URI_TEST as string },
     },
     {
