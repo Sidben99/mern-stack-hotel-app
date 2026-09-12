@@ -3,7 +3,7 @@ import { LoginType } from "@lankaStay/shared/schemes/user/loginSchema";
 import { successDataResponse } from "@/helpers/apiResponses";
 import { getEnv } from "@/conf/env.conf";
 import loginService from "@/services/auth/login.service";
-import { UserResponseType } from "@lankaStay/shared/schemes/user/userResponseSchema";
+import { AccountResponseType } from "@lankaStay/shared/schemes/account/accountResponseSchema";
 export default async function loginController(
   req: Request<any, any, LoginType, any>,
   res: Response,
@@ -18,7 +18,7 @@ export default async function loginController(
   });
   return successDataResponse<{
     accessToken: string;
-    user: UserResponseType;
+    user: AccountResponseType;
   }>(res, 200, "User logged in successfully", {
     accessToken,
     user,
