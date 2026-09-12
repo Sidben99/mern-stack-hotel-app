@@ -1,15 +1,14 @@
 import { Request, Response } from "express";
-import { OwnerApplicationType } from "@lankaStay/shared/schemes/owner/onwerApplicationSchema";
+import { OwnerApplicationInfoType } from "@lankaStay/shared/schemes/owner/ownerApplicationInfoSchema";
 import { successDataResponse } from "@/helpers/apiResponses";
 import becomeOwnerService from "@/services/user/becomeOwner.service";
-import { UserResponseType } from "@lankaStay/shared/schemes/user/userResponseSchema";
 import { APPLICATION_STATUS_TYPE } from "@lankaStay/shared/consts/applicationStatus";
 export default async function becomOwnerController(
-  req: Request<any, any, OwnerApplicationType, any>,
+  req: Request<any, any, OwnerApplicationInfoType, any>,
   res: Response,
 ) {
-  const { sub: id } = req.user;
-  const status = await becomeOwnerService(id, req.body);
+  const user = res.locals.userDoc!;
+  const status = await becomeOwnerService(user, req.body);
   return successDataResponse<{ status: APPLICATION_STATUS_TYPE }>(
     res,
     200,

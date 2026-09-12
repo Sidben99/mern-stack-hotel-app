@@ -1,25 +1,40 @@
-import { UserModel } from "@/models/User.model";
+import { UserDocType, UserModel } from "@/models/User.model";
 import ApiError from "@lankaStay/shared/utils/ApiError";
 import { ERROR_CODES } from "@lankaStay/shared/consts/errorCodes";
-import { OwnerApplicationType } from "@lankaStay/shared/schemes/owner/onwerApplicationSchema";
+import { OwnerApplicationInfoType } from "@lankaStay/shared/schemes/owner/ownerApplicationInfoSchema";
 import { APPLICATION_STATUS } from "@lankaStay/shared/consts/applicationStatus";
 import { ADMIN_STATUS } from "@lankaStay/shared/consts/adminStatus";
 export default async function becomeOwnerService(
-  userId: string,
-  ownerApplicationData: OwnerApplicationType,
+  user: UserDocType,
+  ownerApplicationData: OwnerApplicationInfoType,
 ) {
-  const user = await UserModel.findOne({ _id: userId });
-  // check if user exists
-  if (!user) throw new ApiError(404, "user not found", ERROR_CODES.NOT_FOUND);
-  if (user.ownerInfo?.applicationStatus === APPLICATION_STATUS.PENDING) {
-    return user.ownerInfo.applicationStatus;
+  const updatedUser = await UserModel.findOneAndUpdate(
+    {
+      _id: user._id,
+      "ownerInfo.applicationStatus": {
+        $nin: [APPLICATION_STATUS.PENDING, APPLICATION_STATUS.APPROVED],
+      },
+    },
+    {
+      $set: {
+        ownerInfo: {
+          ...user.ownerInfo,
+          ...ownerApplicationData,
+          adminStatus: ADMIN_STATUS.PENDING,
+          applicationStatus: APPLICATION_STATUS.PENDING,
+        },
+      },
+    },
+    { returnDocument: "after" },
+  );
+
+  if (!updatedUser) {
+    throw new ApiError(
+      400,
+      "application is already in progress or approved",
+      ERROR_CODES.BAD_REQUEST,
+    );
   }
-  user.ownerInfo = {
-    ...user.ownerInfo,
-    ...ownerApplicationData,
-    adminStatus: ADMIN_STATUS.PENDING,
-    applicationStatus: APPLICATION_STATUS.PENDING,
-  };
-  await user.save();
+
   return APPLICATION_STATUS.PENDING;
 }

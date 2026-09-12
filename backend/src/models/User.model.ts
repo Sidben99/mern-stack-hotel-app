@@ -12,14 +12,15 @@ type Tokens = Array<{
   createdAt: Date;
   expiresAt: Date;
 }>;
-type UserDocument = UserType & {
+export type UserDocument = UserType & {
   tokens: Tokens;
   resetPasswordToken?: string;
 };
-type OwnerDocument = OwnerType & {
+export type OwnerDocument = OwnerType & {
   tokens: Tokens;
   resetPasswordToken?: string;
 };
+export type UserDocType = mongoose.Document<unknown, {}, UserDocument | OwnerDocument> & (UserDocument | OwnerDocument) & { _id: mongoose.Types.ObjectId; };
 const ownerInfoSchema = new Schema<OwnerInfoType>(
   {
     firstName: {
@@ -42,9 +43,15 @@ const ownerInfoSchema = new Schema<OwnerInfoType>(
       type: Date,
       required: true,
     },
-    idCardUrl: {
-      type: String,
-      required: true,
+    cardImgInfo: {
+      img_url: {
+        type: String,
+        required: true,
+      },
+      img_id: {
+        type: String,
+        required: true,
+      },
     },
 
     applicationStatus: {
