@@ -8,6 +8,7 @@ const ownerResponseSchema = ownerSchema
   })
   .omit({
     password: true,
+    ownerInfo: true,
   });
 
 export type OwnerResponseType = z.infer<typeof ownerResponseSchema>;

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import ACCEPTED_IMG_TYPE from "../../consts/acceptedImgType";
 
 function isAdult(dateOfBirth: Date): boolean {
   const currentDate = new Date();
@@ -25,7 +26,16 @@ export const ownerApplicationSchema = z.object({
     error: "you must be at least 18 years old",
   }),
   address: z.string("address is required"),
-  idCardUrl: z.url("id card url is invalid"),
+  cardImg: z
+    .custom<File>((img) => img instanceof File)
+    .refine(
+      (img) => img.size <= 5 * 1024 * 1024,
+      "card image must be less than 5MB",
+    )
+    .refine(
+      (img) => ACCEPTED_IMG_TYPE.includes(img.type),
+      "unsupported image format",
+    ),
 });
 
 export type OwnerApplicationType = z.infer<typeof ownerApplicationSchema>;

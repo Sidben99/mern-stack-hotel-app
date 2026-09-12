@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { ownerApplicationSchema } from "./onwerApplicationSchema";
-export const ownerInfoSchema = ownerApplicationSchema.extend({
+import { ownerApplicationInfoSchema } from "./ownerApplicationInfoSchema";
+export const ownerInfoSchema = ownerApplicationInfoSchema.extend({
   applicationStatus: z
     .enum(["pending", "approved", "rejected", "cancelled"])
     .default("pending"),
