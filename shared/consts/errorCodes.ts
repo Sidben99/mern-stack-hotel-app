@@ -16,6 +16,7 @@ export const ERROR_CODES = {
   BAD_REQUEST: "BAD_REQUEST",
   // Resource errors
   NOT_FOUND: "NOT_FOUND",
+  FILE_UPLOAD_ERROR: "FILE_UPLOAD_ERROR",
 
   // Booking-specific errors
   BOOKING_UNAVAILABLE: "BOOKING_UNAVAILABLE",
@@ -36,6 +37,8 @@ export const ERROR_CODES = {
   // Rate limiting
   TOO_MANY_REQUESTS: "TOO_MANY_REQUESTS",
   FETCH_FAILED: "FETCH_FAILED",
+  // body parser
+  BODY_PARSER_ERROR: "BODY_PARSER_ERROR",
 } as const;
 
 export type ERROR_CODES = (typeof ERROR_CODES)[keyof typeof ERROR_CODES];
