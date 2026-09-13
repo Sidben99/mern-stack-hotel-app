@@ -7,7 +7,8 @@ import { hashPassword } from "@/helpers/hashComparePassword";
 import { createToken } from "@/helpers/createVerifyToken";
 import { getEnv } from "@/conf/env.conf";
 import hashStr from "@/helpers/createHash";
-import { UserResponseType } from "@lankaStay/shared/schemes/user/userResponseSchema";
+import { AccountResponseType } from "@lankaStay/shared/schemes/account/accountResponseSchema";
+import { ROLES } from "@lankaStay/shared/consts/roles";
 export default async function registerService(userInfo: RegisterType) {
   const envs = getEnv();
   const { email, password } = userInfo;
@@ -19,48 +20,50 @@ export default async function registerService(userInfo: RegisterType) {
       "email already exists",
       ERROR_CODES.EMAIL_ALREADY_EXISTS,
     );
-  // hash password
-  const hashedPassword = await hashPassword(password);
-  const newUser = await UserModel.create({
-    ...userInfo,
-    password: hashedPassword,
-  });
+  const userId = new mongoose.Types.ObjectId();
+  const refreshTokenId = new mongoose.Types.ObjectId();
   // create access and refresh token
   const accessToken = createToken(
     {
-      sub: newUser._id.toString(),
-      role: newUser.role,
+      sub: userId.toString(),
+      role: ROLES.USER,
     },
     envs.ACCESS_TOKEN_SECRET,
     envs.ACCESS_TOKEN_LIFETIME,
   );
-  const refreshTokenId = new mongoose.Types.ObjectId();
   const refreshToken = createToken(
     {
-      sub: newUser._id.toString(),
-      role: newUser.role,
+      sub: userId.toString(),
       tokenId: refreshTokenId.toString(),
     },
     envs.REFRESH_TOKEN_SECRET,
     envs.REFRESH_TOKEN_LIFETIME,
   );
-  // add refresh token to user
   const hashedRefreshToken = hashStr(refreshToken);
-  newUser.tokens.push({
-    _id: refreshTokenId,
-    token: hashedRefreshToken,
-    createdAt: new Date(),
-    expiresAt: new Date(Date.now() + envs.REFRESH_TOKEN_LIFETIME),
+
+  // hash password
+  const hashedPassword = await hashPassword(password);
+  const newUser = await UserModel.create({
+    _id: userId,
+    ...userInfo,
+    password: hashedPassword,
+    tokens: [
+      {
+        _id: refreshTokenId,
+        token: hashedRefreshToken,
+        expiresAt: new Date(Date.now() + envs.REFRESH_TOKEN_LIFETIME * 1000),
+      },
+    ],
   });
-  // save user
-  await newUser.save();
-  const userResponseDto: UserResponseType = {
+
+  const userResponseDto: AccountResponseType = {
     id: newUser._id.toString(),
     username: newUser.username,
     email: newUser.email,
     role: newUser.role,
     avatar: newUser.avatar,
     nationality: newUser.nationality,
+    phoneNumber: newUser.phoneNumber,
   };
   return { user: userResponseDto, accessToken, refreshToken };
 }
