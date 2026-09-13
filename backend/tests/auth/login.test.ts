@@ -4,9 +4,9 @@ import app from "../../src/app.ts";
 import { LoginType } from "@lankaStay/shared/schemes/user/loginSchema.ts";
 import { ApiResponse } from "@lankaStay/shared/utils/ApiResponse.ts";
 import { UserResponseType } from "@lankaStay/shared/schemes/user/userResponseSchema.ts";
-import { registerTestUser, getCookieFromJar } from "./helper.ts";
+import { registerTestUser, getCookieFromJar } from "../helper.ts";
 const api = supertest(app);
-
+const path = "/api/auth/login";
 describe("POST /api/auth/login", () => {
   it("should return 200 when logging in successfully", async () => {
     const api = supertest.agent(app);
@@ -15,7 +15,7 @@ describe("POST /api/auth/login", () => {
       password: "password",
     };
     await registerTestUser(api, loginBody);
-    const response = await api.post("/api/auth/login").send(loginBody);
+    const response = await api.post(path).send(loginBody);
     const responseBody = response.body as ApiResponse<{
       user: UserResponseType;
       accessToken: string;
@@ -33,7 +33,7 @@ describe("POST /api/auth/login", () => {
       email: `notFound-${Date.now()}@example.com`,
       password: "password",
     };
-    const response = await api.post("/api/auth/login").send(loginBody);
+    const response = await api.post(path).send(loginBody);
     const responseBody = response.body as ApiResponse<{
       user: UserResponseType;
       accessToken: string;
@@ -50,7 +50,7 @@ describe("POST /api/auth/login", () => {
     await registerTestUser(api, {
       email: loginBody.email,
     });
-    const response = await api.post("/api/auth/login").send(loginBody);
+    const response = await api.post(path).send(loginBody);
     const responseBody = response.body as ApiResponse<{
       user: UserResponseType;
       accessToken: string;

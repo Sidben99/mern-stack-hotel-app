@@ -5,16 +5,15 @@ import { createToken } from "../../src/helpers/createVerifyToken.ts";
 import { getEnv } from "../../src/conf/env.conf.ts";
 import { UserModel } from "../../src/models/User.model.ts";
 import { sendEmail } from "../../src/helpers/sendEmail.ts";
-import { registerTestUser } from "./helper.ts";
+import { registerTestUser } from "../helper.ts";
 vi.mock("../../src/helpers/sendEmail.ts");
 const api = supertest(app);
 const envs = getEnv();
+const path = "/api/auth/reset-password";
 describe("POST /api/auth/reset-password", () => {
   it("should return 400 when password is too short", async () => {
     const password = "12";
-    const response = await api
-      .post(`/api/auth/reset-password?token=token`)
-      .send({ password });
+    const response = await api.post(`${path}?token=token`).send({ password });
     console.log("response.body from reset-password test : ", response.body);
     expect(response.status).toBe(400);
     expect(response.body.message).toBe("validation error");
@@ -26,7 +25,7 @@ describe("POST /api/auth/reset-password", () => {
     const token = createToken({}, envs.ACCESS_TOKEN_SECRET, 0);
     const password = "password";
     const response = await api
-      .post(`/api/auth/reset-password?token=${token}`)
+      .post(`${path}?token=${token}`)
       .send({ password });
     expect(response.status).toBe(401);
     expect(response.body.message).toBe("token expired");
@@ -35,7 +34,7 @@ describe("POST /api/auth/reset-password", () => {
     const token = createToken({}, "secret", 0);
     const password = "password";
     const response = await api
-      .post(`/api/auth/reset-password?token=${token}`)
+      .post(`${path}?token=${token}`)
       .send({ password });
     expect(response.status).toBe(401);
     expect(response.body.message).toBe("invalid token");
@@ -50,7 +49,7 @@ describe("POST /api/auth/reset-password", () => {
     const password = "password";
     await UserModel.findByIdAndDelete(registerResponseBody.data.user.id);
     const response = await api
-      .post(`/api/auth/reset-password?token=${token}`)
+      .post(`${path}?token=${token}`)
       .send({ password });
     expect(response.status).toBe(404);
     expect(response.body.message).toBe("user not found");
@@ -65,7 +64,7 @@ describe("POST /api/auth/reset-password", () => {
     );
     const password = "password";
     const response = await api
-      .post(`/api/auth/reset-password?token=${token}`)
+      .post(`${path}?token=${token}`)
       .send({ password });
     expect(response.status).toBe(200);
     expect(response.body.message).toBe("password reset successfully");
@@ -79,7 +78,7 @@ describe("POST /api/auth/reset-password", () => {
     console.log("token : ", token);
     const password = "password";
     const response = await api
-      .post(`/api/auth/reset-password?token=${token}`)
+      .post(`${path}?token=${token}`)
       .send({ password });
     expect(response.status).toBe(200);
     expect(response.body.message).toBe("password reset successfully");
