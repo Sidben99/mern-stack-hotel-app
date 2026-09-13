@@ -6,7 +6,7 @@ export default function autherizeMiddleware(roles: ROLES[]) {
   return function (req: Request, res: Response, next: NextFunction) {
     const { role } = req.user;
     if (!roles.includes(role))
-      throw new ApiError(403, "unauthorized user", ERROR_CODES.UNAUTHORIZED);
+      throw new ApiError(403, "forbidden access", ERROR_CODES.FORBIDDEN);
     next();
   };
 }
