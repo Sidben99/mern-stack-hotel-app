@@ -4,7 +4,7 @@ import { createToken, verifyToken } from "@/helpers/createVerifyToken";
 import { UserModel } from "@/models/User.model";
 import { RefreshTokenPayload } from "@/types/types";
 import { ERROR_CODES } from "@lankaStay/shared/consts/errorCodes";
-import { UserResponseType } from "@lankaStay/shared/schemes/user/userResponseSchema";
+import { AccountResponseType } from "@lankaStay/shared/schemes/account/accountResponseSchema";
 export default async function refreshTokenService(refreshToken: string) {
   const envs = getEnv();
   const payload = verifyToken<RefreshTokenPayload>(
@@ -27,13 +27,14 @@ export default async function refreshTokenService(refreshToken: string) {
     envs.ACCESS_TOKEN_SECRET,
     envs.ACCESS_TOKEN_LIFETIME,
   );
-  const userResponseDto: UserResponseType = {
+  const userResponseDto: AccountResponseType = {
     id: user._id.toString(),
     username: user.username,
     email: user.email,
     role: user.role,
     avatar: user.avatar,
     nationality: user.nationality,
+    phoneNumber: user.phoneNumber,
   };
 
   return { user: userResponseDto, accessToken };

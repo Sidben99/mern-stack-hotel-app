@@ -8,9 +8,7 @@ import { createToken } from "@/helpers/createVerifyToken";
 import { getEnv } from "@/conf/env.conf";
 import hashStr from "@/helpers/createHash";
 import { AccessTokenPayload, RefreshTokenPayload } from "@/types/types";
-import { UserResponseType } from "@lankaStay/shared/schemes/user/userResponseSchema";
-import { ROLES } from "@lankaStay/shared/consts/roles";
-import { type OwnerResponseType } from "@lankaStay/shared/schemes/owner/ownerResponseSchema";
+import { AccountResponseType } from "@lankaStay/shared/schemes/account/accountResponseSchema";
 export default async function loginService(credentials: LoginType) {
   const envs = getEnv();
   const { email, password } = credentials;
@@ -46,7 +44,6 @@ export default async function loginService(credentials: LoginType) {
   const refreshToken = createToken<RefreshTokenPayload>(
     {
       sub: user.id,
-      role: user.role,
       tokenId: refreshTokenId.toString(),
     },
     envs.REFRESH_TOKEN_SECRET,
@@ -57,12 +54,12 @@ export default async function loginService(credentials: LoginType) {
   user.tokens.push({
     _id: refreshTokenId,
     token: hashedRefreshToken,
-    expiresAt: new Date(Date.now() + envs.REFRESH_TOKEN_LIFETIME),
-    createdAt: new Date(),
+    expiresAt: new Date(Date.now() + envs.REFRESH_TOKEN_LIFETIME * 1000),
   });
   // save user
   await user.save();
-  const baseUser = {
+
+  const userResponseDto: AccountResponseType = {
     id: user._id.toString(),
     username: user.username,
     email: user.email,
@@ -71,11 +68,6 @@ export default async function loginService(credentials: LoginType) {
     nationality: user.nationality,
     phoneNumber: user.phoneNumber,
   };
-
-  const userResponseDto: UserResponseType | OwnerResponseType =
-    user.role === ROLES.OWNER
-      ? { ...baseUser, role: ROLES.OWNER, ownerInfo: user.ownerInfo }
-      : { ...baseUser, role: user.role };
 
   return { user: userResponseDto, accessToken, refreshToken };
 }
