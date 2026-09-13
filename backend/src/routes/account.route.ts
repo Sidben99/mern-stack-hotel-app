@@ -1,8 +1,8 @@
 import { Router } from "express";
 import authenticateMiddleware from "@/middlewares/authenticate.middleware";
-import { updateMyProfile } from "@lankaStay/shared/schemes/user/updateMyProfileSchema";
+import { updateAccount } from "@lankaStay/shared/schemes/account/updateAccountSchema";
 import validationMiddleware from "@/middlewares/validation.middleware";
-import updateMyProfileController from "@/controllers/account/updateMyProfile.controller";
+import updateAccountController from "@/controllers/account/updateAccount.controller";
 const accountRouter = Router();
 /**
  * BODY:   { email: string, password: string }
@@ -12,8 +12,8 @@ const accountRouter = Router();
 accountRouter.route("/profile").patch(
   authenticateMiddleware,
   validationMiddleware({
-    body: updateMyProfile,
+    body: updateAccount,
   }),
-  updateMyProfileController,
+  updateAccountController,
 );
 export default accountRouter;

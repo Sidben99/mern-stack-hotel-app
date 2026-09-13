@@ -1,14 +1,14 @@
 import { Request, Response } from "express";
-import { UpdateMyProfileType } from "@lankaStay/shared/schemes/user/updateMyProfileSchema";
+import { UpdateAccountType } from "@lankaStay/shared/schemes/account/updateAccountSchema";
 import { successDataResponse } from "@/helpers/apiResponses";
-import updateMyProfileService from "@/services/account/updateMyProfile.service";
+import updateAccountService from "@/services/account/updateAccount.service";
 import { AccountResponseType } from "@lankaStay/shared/schemes/account/accountResponseSchema";
-export default async function updateMyProfileController(
-  req: Request<any, any, UpdateMyProfileType, any>,
+export default async function updateAccountController(
+  req: Request<any, any, UpdateAccountType, any>,
   res: Response,
 ) {
   const { sub: id } = req.user;
-  const user = await updateMyProfileService(id, req.body);
+  const user = await updateAccountService(id, req.body);
 
   return successDataResponse<{ user: AccountResponseType }>(
     res,
