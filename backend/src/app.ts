@@ -7,7 +7,6 @@ import errorHandlerMiddleware from "@/middlewares/errorHandler.middleware";
 import rootRouter from "@/routes/root.route";
 import authRouter from "@/routes/auth.route";
 import userRouter from "@/routes/user.route";
-import accountRouter from "@/routes/account.route";
 const app = express();
 
 app.use(
@@ -26,7 +25,6 @@ app.get("/api/health", (req: Request, res: Response) => {
 app.use("/api/", rootRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
-app.use("/api/account", accountRouter);
 app.use((req, res) => {
   return res.status(404).json({ message: "route not found" });
 });

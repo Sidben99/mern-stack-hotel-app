@@ -1,7 +1,7 @@
 import supertest from "supertest";
 import { describe, it, expect } from "vitest";
 import app from "../../src/app.ts";
-import { RegisterType } from "@lankaStay/shared/schemes/user/registerSchema.ts";
+import { RegisterType } from "@lankaStay/shared/schemes/auth/registerSchema.ts";
 import { registerTestUser, getCookieFromJar } from "../helper.ts";
 const api = supertest(app);
 const user: Partial<RegisterType> = {

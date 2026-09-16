@@ -2,25 +2,19 @@ import mongoose, { model, Schema } from "mongoose";
 import { ROLES } from "@lankaStay/shared/consts/roles";
 import { countriesCodes } from "@lankaStay/shared/consts/countries";
 import { type UserType } from "@lankaStay/shared/schemes/user/schema";
-import { OwnerInfoType } from "@lankaStay/shared/schemes/owner/ownerInfoSchema";
-import { type OwnerType } from "@lankaStay/shared/schemes/owner/schema";
+import { OwnerInfoType } from "@lankaStay/shared/schemes/user/ownerInfoSchema";
 import { APPLICATION_STATUS } from "@lankaStay/shared/consts/applicationStatus";
-import { ADMIN_STATUS } from "@lankaStay/shared/consts/adminStatus";
+import type { HydratedDocument } from "mongoose";
 type Tokens = Array<{
   _id: mongoose.Types.ObjectId;
   token: string;
-  createdAt: Date;
   expiresAt: Date;
 }>;
-export type UserDocument = UserType & {
+export type UserFields = UserType & {
   tokens: Tokens;
   resetPasswordToken?: string;
 };
-export type OwnerDocument = OwnerType & {
-  tokens: Tokens;
-  resetPasswordToken?: string;
-};
-export type UserDocType = mongoose.Document<unknown, {}, UserDocument | OwnerDocument> & (UserDocument | OwnerDocument) & { _id: mongoose.Types.ObjectId; };
+export type UserDoc = HydratedDocument<UserFields>;
 const ownerInfoSchema = new Schema<OwnerInfoType>(
   {
     firstName: {
@@ -59,11 +53,6 @@ const ownerInfoSchema = new Schema<OwnerInfoType>(
       enum: Object.values(APPLICATION_STATUS),
       default: "pending",
     },
-    adminStatus: {
-      type: String,
-      enum: Object.values(ADMIN_STATUS),
-      default: "pending",
-    },
     adminReviewedAt: {
       type: Date,
     },
@@ -80,7 +69,7 @@ const ownerInfoSchema = new Schema<OwnerInfoType>(
   },
   { _id: false, timestamps: true },
 );
-const userSchema = new Schema<UserDocument | OwnerDocument>(
+const userSchema = new Schema<UserFields>(
   {
     email: {
       type: String,
@@ -126,11 +115,6 @@ const userSchema = new Schema<UserDocument | OwnerDocument>(
         token: {
           type: String,
           required: true,
-        },
-        createdAt: {
-          type: Date,
-          required: true,
-          default: Date.now,
         },
         expiresAt: { type: Date, required: true },
       },

@@ -1,6 +1,6 @@
 import { test, expect, Page } from "@playwright/test";
 import { registerTestUser } from "../helpers";
-import { LoginType } from "@lankaStay/shared/schemes/user/loginSchema";
+import { LoginType } from "@lankaStay/shared/schemes/auth/loginSchema";
 const newUser = {
   email: `doe-${Date.now()}@example.com`,
   password: "password",

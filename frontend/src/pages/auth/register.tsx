@@ -17,7 +17,7 @@ import {
 import {
   registerSchema,
   type RegisterType,
-} from '@lankaStay/shared/schemes/user/registerSchema.ts';
+} from '@lankaStay/shared/schemes/auth/registerSchema.ts';
 import { countriesEntries } from '@lankaStay/shared/consts/countries';
 import background from '../../assets/image 5.png';
 import { useUserStore } from '@/store/userStore.ts';

@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import {
   loginSchema,
   type LoginType,
-} from '@lankaStay/shared/schemes/user/loginSchema.ts';
+} from '@lankaStay/shared/schemes/auth/loginSchema.ts';
 import background from '../../assets/image 5.png';
 import useLogin from '@/hooks/auth/useLogin';
 import { useUserStore } from '@/store/userStore';

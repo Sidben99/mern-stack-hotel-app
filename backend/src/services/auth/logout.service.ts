@@ -12,7 +12,7 @@ export default async function logoutService(refreshToken: string) {
     const user = await UserModel.findByIdAndUpdate(
       payload.sub,
       { $pull: { tokens: { _id: payload.tokenId } } },
-      { new: true },
+      { returnDocument: "after" },
     );
     console.log("user inside logout service : ", user);
   } catch (error) {

@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { forgetPasswordSchema } from '@lankaStay/shared/schemes/user/forgetPasswordSchema';
-import type { ForgetPassword } from '@lankaStay/shared/schemes/user/forgetPasswordSchema';
+import { forgetPasswordSchema } from '@lankaStay/shared/schemes/auth/forgetPasswordSchema';
+import type { ForgetPassword } from '@lankaStay/shared/schemes/auth/forgetPasswordSchema';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { FieldLabel, FieldError, Field } from '@/components/ui/field';

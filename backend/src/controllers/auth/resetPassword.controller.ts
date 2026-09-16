@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import {
   ResetPasswordTokenType,
   ResetPasswordDataType,
-} from "@lankaStay/shared/schemes/user/resetPasswordSchema";
+} from "@lankaStay/shared/schemes/auth/resetPasswordSchema";
 import resetPasswordResetService from "@/services/auth/resetPassword.service";
 import { successMessageResponse } from "@/helpers/apiResponses";
 export default async function resetPasswordController(

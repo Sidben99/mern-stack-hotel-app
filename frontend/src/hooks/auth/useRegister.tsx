@@ -1,6 +1,6 @@
 import { register } from '@/api/auth';
 import useMutationWrapper from '../useMutationWrapper';
-import type { RegisterType } from '@lankaStay/shared/schemes/user/registerSchema.ts';
+import type { RegisterType } from '@lankaStay/shared/schemes/auth/registerSchema.ts';
 export default function useRegister() {
   const { data, isPending, mutate } = useMutationWrapper(
     (registerCredentials: RegisterType) => register(registerCredentials),

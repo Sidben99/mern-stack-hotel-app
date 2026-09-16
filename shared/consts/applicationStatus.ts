@@ -1,6 +1,7 @@
-import { ADMIN_STATUS } from "./adminStatus";
 export const APPLICATION_STATUS = {
-  ...ADMIN_STATUS,
+  PENDING: "pending",
+  APPROVED: "approved",
+  REJECTED: "rejected",
   CANCELLED: "cancelled",
 } as const;
 

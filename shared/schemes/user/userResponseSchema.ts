@@ -1,9 +1,19 @@
 import { z } from "zod";
 import { userSchema } from "./schema";
-export const userResponseSchema = userSchema
-  .omit({ password: true, ownerInfo: true })
+import { ownerInfoSchema } from "./ownerInfoSchema";
+
+const ownerInfoResponseSchema = ownerInfoSchema
+  .omit({ stripeAccountId: true })
   .extend({
-    id: z.string(),
+    cardImgInfo: z.object({
+      img_url: z.string(),
+    }),
   });
+
+export const userResponseSchema = userSchema.omit({ password: true }).extend({
+  id: z.string(),
+  ownerInfo: ownerInfoResponseSchema.optional(),
+});
+
 type UserResponseType = z.infer<typeof userResponseSchema>;
 export type { UserResponseType };

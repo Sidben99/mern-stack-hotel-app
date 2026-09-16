@@ -1,13 +1,13 @@
 import mongoose from "mongoose";
 import { UserModel } from "@/models/User.model";
-import { RegisterType } from "@lankaStay/shared/schemes/user/registerSchema";
+import { RegisterType } from "@lankaStay/shared/schemes/auth/registerSchema";
 import ApiError from "@lankaStay/shared/utils/ApiError";
 import { ERROR_CODES } from "@lankaStay/shared/consts/errorCodes";
 import { hashPassword } from "@/helpers/hashComparePassword";
 import { createToken } from "@/helpers/createVerifyToken";
 import { getEnv } from "@/conf/env.conf";
 import hashStr from "@/helpers/createHash";
-import { AccountResponseType } from "@lankaStay/shared/schemes/account/accountResponseSchema";
+import { UserResponseType } from "@lankaStay/shared/schemes/user/userResponseSchema";
 import { ROLES } from "@lankaStay/shared/consts/roles";
 export default async function registerService(userInfo: RegisterType) {
   const envs = getEnv();
@@ -56,7 +56,7 @@ export default async function registerService(userInfo: RegisterType) {
     ],
   });
 
-  const userResponseDto: AccountResponseType = {
+  const user: UserResponseType = {
     id: newUser._id.toString(),
     username: newUser.username,
     email: newUser.email,
@@ -64,6 +64,20 @@ export default async function registerService(userInfo: RegisterType) {
     avatar: newUser.avatar,
     nationality: newUser.nationality,
     phoneNumber: newUser.phoneNumber,
+    ownerInfo: newUser.ownerInfo
+      ? {
+          firstName: newUser.ownerInfo.firstName,
+          lastName: newUser.ownerInfo.lastName,
+          nationalNumber: newUser.ownerInfo.nationalNumber,
+          dateOfBirth: newUser.ownerInfo.dateOfBirth,
+          address: newUser.ownerInfo.address,
+          cardImgInfo: { img_url: newUser.ownerInfo.cardImgInfo.img_url },
+          applicationStatus: newUser.ownerInfo.applicationStatus,
+          rejectionNote: newUser.ownerInfo.rejectionNote,
+          adminReviewedAt: newUser.ownerInfo.adminReviewedAt,
+          payoutsEnabled: newUser.ownerInfo.payoutsEnabled,
+        }
+      : undefined,
   };
-  return { user: userResponseDto, accessToken, refreshToken };
+  return { user, accessToken, refreshToken };
 }

@@ -1,5 +1,5 @@
 import { Page } from "@playwright/test";
-import { RegisterType } from "@lankaStay/shared/schemes/user/registerSchema";
+import { RegisterType } from "@lankaStay/shared/schemes/auth/registerSchema";
 import { ApiResponse } from "@lankaStay/shared/utils/ApiResponse";
 import { UserResponseType } from "@lankaStay/shared/schemes/user/userResponseSchema";
 export async function registerTestUser(user: Partial<RegisterType> = {}) {

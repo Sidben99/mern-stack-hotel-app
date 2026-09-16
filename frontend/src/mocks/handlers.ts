@@ -1,9 +1,9 @@
 // src/mocks/handlers.ts
 import { http, HttpResponse } from 'msw';
-import type { ForgetPassword } from '@lankaStay/shared/schemes/user/forgetPasswordSchema';
+import type { ForgetPassword } from '@lankaStay/shared/schemes/auth/forgetPasswordSchema';
 import { ERROR_CODES } from '@lankaStay/shared/consts/errorCodes';
-import type { LoginType } from '@lankaStay/shared/schemes/user/loginSchema';
-import type { RegisterType } from '@lankaStay/shared/schemes/user/registerSchema';
+import type { LoginType } from '@lankaStay/shared/schemes/auth/loginSchema';
+import type { RegisterType } from '@lankaStay/shared/schemes/auth/registerSchema';
 export const handlers = [
   http.post(
     'http://localhost:5000/api/auth/forget-password',

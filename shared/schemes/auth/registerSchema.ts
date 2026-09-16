@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { userSchema } from "./schema";
+import { userSchema } from "../user/schema";
 const registerSchema = userSchema
   .omit({ role: true, avatar: true, ownerInfo: true })
   .extend({

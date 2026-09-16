@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import forgetPasswordService from "@/services/auth/forgetPassword.service";
 import { successMessageResponse } from "@/helpers/apiResponses";
-import { ForgetPassword } from "@lankaStay/shared/schemes/user/forgetPasswordSchema";
+import { ForgetPassword } from "@lankaStay/shared/schemes/auth/forgetPasswordSchema";
 export default async function forgetPasswordController(
   req: Request<any, any, ForgetPassword, any>,
   res: Response,

@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import { RegisterType } from "@lankaStay/shared/schemes/user/registerSchema";
+import { RegisterType } from "@lankaStay/shared/schemes/auth/registerSchema";
 import { successDataResponse } from "@/helpers/apiResponses";
 import registerService from "@/services/auth/register.service";
 import { getEnv } from "@/conf/env.conf";
-import { AccountResponseType } from "@lankaStay/shared/schemes/account/accountResponseSchema";
+import { UserResponseType } from "@lankaStay/shared/schemes/user/userResponseSchema";
 export default async function registerController(
   req: Request<any, any, RegisterType, any>,
   res: Response,
@@ -17,7 +17,7 @@ export default async function registerController(
   });
   return successDataResponse<{
     accessToken: string;
-    user: AccountResponseType;
+    user: UserResponseType;
   }>(res, 201, "User registered successfully", {
     accessToken,
     user,

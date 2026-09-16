@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import {
   resetPasswordNewPasswordSchema,
   type ResetPasswordNewPasswordType,
-} from '@lankaStay/shared/schemes/user/resetPasswordSchema';
+} from '@lankaStay/shared/schemes/auth/resetPasswordSchema';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { FieldLabel, FieldError, Field } from '@/components/ui/field';

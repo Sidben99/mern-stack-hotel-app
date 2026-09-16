@@ -1,12 +1,11 @@
-import { UserDocType, UserModel } from "@/models/User.model";
+import { UserDoc, UserModel } from "@/models/User.model";
 import ApiError from "@lankaStay/shared/utils/ApiError";
 import { ERROR_CODES } from "@lankaStay/shared/consts/errorCodes";
-import { OwnerApplicationInfoType } from "@lankaStay/shared/schemes/owner/ownerApplicationInfoSchema";
+import { OwnerApplicationType } from "@lankaStay/shared/schemes/user/ownerApplicationSchema";
 import { APPLICATION_STATUS } from "@lankaStay/shared/consts/applicationStatus";
-import { ADMIN_STATUS } from "@lankaStay/shared/consts/adminStatus";
 export default async function becomeOwnerService(
-  user: UserDocType,
-  ownerApplicationData: OwnerApplicationInfoType,
+  user: UserDoc,
+  ownerApplicationData: OwnerApplicationType,
 ) {
   const updatedUser = await UserModel.findOneAndUpdate(
     {
@@ -16,14 +15,13 @@ export default async function becomeOwnerService(
       },
     },
     {
-      $set: {
-        ownerInfo: {
-          ...user.ownerInfo,
-          ...ownerApplicationData,
-          adminStatus: ADMIN_STATUS.PENDING,
-          applicationStatus: APPLICATION_STATUS.PENDING,
+        $set: {
+          ownerInfo: {
+            ...user.ownerInfo,
+            ...ownerApplicationData,
+            applicationStatus: APPLICATION_STATUS.PENDING,
+          },
         },
-      },
     },
     { returnDocument: "after" },
   );

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { userSchema } from "./schema";
+import { userSchema } from "../user/schema";
 export const forgetPasswordSchema = userSchema.pick({
   email: true,
 });

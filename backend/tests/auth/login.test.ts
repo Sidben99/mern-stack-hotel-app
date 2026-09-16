@@ -1,7 +1,7 @@
 import supertest from "supertest";
 import { describe, it, expect } from "vitest";
 import app from "../../src/app.ts";
-import { LoginType } from "@lankaStay/shared/schemes/user/loginSchema.ts";
+import { LoginType } from "@lankaStay/shared/schemes/auth/loginSchema.ts";
 import { ApiResponse } from "@lankaStay/shared/utils/ApiResponse.ts";
 import { UserResponseType } from "@lankaStay/shared/schemes/user/userResponseSchema.ts";
 import { registerTestUser, getCookieFromJar } from "../helper.ts";

@@ -1,19 +1,19 @@
 import { Router } from "express";
 import registerController from "@/controllers/auth/register.controller";
 import validationMiddleware from "@/middlewares/validation.middleware";
-import { registerSchema } from "@lankaStay/shared/schemes/user/registerSchema";
-import { loginSchema } from "@lankaStay/shared/schemes/user/loginSchema";
+import { registerSchema } from "@lankaStay/shared/schemes/auth/registerSchema";
+import { loginSchema } from "@lankaStay/shared/schemes/auth/loginSchema";
 import loginController from "@/controllers/auth/login.controller";
 import refreshTokenController from "@/controllers/auth/refreshToken.controller";
-import { forgetPasswordSchema } from "@lankaStay/shared/schemes/user/forgetPasswordSchema";
+import { forgetPasswordSchema } from "@lankaStay/shared/schemes/auth/forgetPasswordSchema";
 import forgetPasswordController from "@/controllers/auth/forgetPassword.controller";
 import {
   resetPasswordDataSchema,
   resetPasswordTokenSchema,
-} from "@lankaStay/shared/schemes/user/resetPasswordSchema";
+} from "@lankaStay/shared/schemes/auth/resetPasswordSchema";
 import resetPasswordController from "@/controllers/auth/resetPassword.controller";
 import logoutController from "@/controllers/auth/logout.controller";
-export const authRouter = Router();
+const authRouter = Router();
 /**
  * BODY:   { email: string, password: string }
  * SUCCESS:  200  { message, data: { accessToken, user } }  + httpOnly refreshToken cookie
@@ -72,3 +72,4 @@ authRouter.route("/reset-password").post(
  * ERRORS:  401  UNAUTHORIZED
  */
 authRouter.route("/logout").post(logoutController);
+export default authRouter;

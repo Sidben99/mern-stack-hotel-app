@@ -7,7 +7,7 @@ function isAdult(dateOfBirth: Date): boolean {
   return dateOfBirth < currentDate;
 }
 
-export const ownerApplicationSchema = z.object({
+export const ownerApplicationFormSchema = z.object({
   firstName: z
     .string()
     .min(2, "first name must be at least 2 characters long")
@@ -38,4 +38,6 @@ export const ownerApplicationSchema = z.object({
     ),
 });
 
-export type OwnerApplicationType = z.infer<typeof ownerApplicationSchema>;
+export type OwnerApplicationFormType = z.infer<
+  typeof ownerApplicationFormSchema
+>;
