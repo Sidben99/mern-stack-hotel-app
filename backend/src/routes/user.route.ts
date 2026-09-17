@@ -11,6 +11,7 @@ import { createCloudinaryUploadMiddleware } from "@/middlewares/uploadToCloudina
 import { ownerStatusMiddleware } from "@/middlewares/ownerStatus.middleware";
 import { updateUserSchema } from "@lankaStay/shared/schemes/user/updateUserSchema";
 import updateUserController from "@/controllers/user/updateUser.controller";
+import cancelOwnerApplicationController from "@/controllers/user/cancelOwnerApplication.controller";
 const userRouter = Router();
 const uploadMiddleware = createMulterUploadMiddleware(
   "cardImg",
@@ -33,6 +34,13 @@ userRouter.route("/become-owner").post(
   ownerStatusMiddleware,
   uploadToCloudinaryMiddleware,
   becomOwnerController,
+);
+
+userRouter.post(
+  "/become-owner/cancel",
+  authenticateMiddleware,
+  autherizeMiddleware([ROLES.USER]),
+  cancelOwnerApplicationController,
 );
 
 /**
