@@ -7,7 +7,7 @@ import { hashPassword } from "@/helpers/hashComparePassword";
 import { createToken } from "@/helpers/createVerifyToken";
 import { getEnv } from "@/conf/env.conf";
 import hashStr from "@/helpers/createHash";
-import { UserResponseType } from "@lankaStay/shared/schemes/user/userResponseSchema";
+import userResponseShapeFromDoc from "@/helpers/userResponseShapeFromDoc";
 import { ROLES } from "@lankaStay/shared/consts/roles";
 export default async function registerService(userInfo: RegisterType) {
   const envs = getEnv();
@@ -56,28 +56,6 @@ export default async function registerService(userInfo: RegisterType) {
     ],
   });
 
-  const user: UserResponseType = {
-    id: newUser._id.toString(),
-    username: newUser.username,
-    email: newUser.email,
-    role: newUser.role,
-    avatar: newUser.avatar,
-    nationality: newUser.nationality,
-    phoneNumber: newUser.phoneNumber,
-    ownerInfo: newUser.ownerInfo
-      ? {
-          firstName: newUser.ownerInfo.firstName,
-          lastName: newUser.ownerInfo.lastName,
-          nationalNumber: newUser.ownerInfo.nationalNumber,
-          dateOfBirth: newUser.ownerInfo.dateOfBirth,
-          address: newUser.ownerInfo.address,
-          cardImgInfo: { img_url: newUser.ownerInfo.cardImgInfo.img_url },
-          applicationStatus: newUser.ownerInfo.applicationStatus,
-          rejectionNote: newUser.ownerInfo.rejectionNote,
-          adminReviewedAt: newUser.ownerInfo.adminReviewedAt,
-          payoutsEnabled: newUser.ownerInfo.payoutsEnabled,
-        }
-      : undefined,
-  };
+  const user = userResponseShapeFromDoc(newUser);
   return { user, accessToken, refreshToken };
 }

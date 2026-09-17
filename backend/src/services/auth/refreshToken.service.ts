@@ -4,7 +4,7 @@ import { createToken, verifyToken } from "@/helpers/createVerifyToken";
 import { UserModel } from "@/models/User.model";
 import { RefreshTokenPayload } from "@/types/types";
 import { ERROR_CODES } from "@lankaStay/shared/consts/errorCodes";
-import { UserResponseType } from "@lankaStay/shared/schemes/user/userResponseSchema";
+import userResponseShapeFromDoc from "@/helpers/userResponseShapeFromDoc";
 export default async function refreshTokenService(refreshToken: string) {
   const envs = getEnv();
   const payload = verifyToken<RefreshTokenPayload>(
@@ -27,29 +27,7 @@ export default async function refreshTokenService(refreshToken: string) {
     envs.ACCESS_TOKEN_SECRET,
     envs.ACCESS_TOKEN_LIFETIME,
   );
-  const userResponseDto: UserResponseType = {
-    id: user._id.toString(),
-    username: user.username,
-    email: user.email,
-    role: user.role,
-    avatar: user.avatar,
-    nationality: user.nationality,
-    phoneNumber: user.phoneNumber,
-    ownerInfo: user.ownerInfo
-      ? {
-          firstName: user.ownerInfo.firstName,
-          lastName: user.ownerInfo.lastName,
-          nationalNumber: user.ownerInfo.nationalNumber,
-          dateOfBirth: user.ownerInfo.dateOfBirth,
-          address: user.ownerInfo.address,
-          cardImgInfo: { img_url: user.ownerInfo.cardImgInfo.img_url },
-          applicationStatus: user.ownerInfo.applicationStatus,
-          rejectionNote: user.ownerInfo.rejectionNote,
-          adminReviewedAt: user.ownerInfo.adminReviewedAt,
-          payoutsEnabled: user.ownerInfo.payoutsEnabled,
-        }
-      : undefined,
-  };
+  const userResponseDto = userResponseShapeFromDoc(user);
 
   return { user: userResponseDto, accessToken };
 }

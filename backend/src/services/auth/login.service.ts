@@ -8,7 +8,7 @@ import { createToken } from "@/helpers/createVerifyToken";
 import { getEnv } from "@/conf/env.conf";
 import hashStr from "@/helpers/createHash";
 import { AccessTokenPayload, RefreshTokenPayload } from "@/types/types";
-import { UserResponseType } from "@lankaStay/shared/schemes/user/userResponseSchema";
+import userResponseShapeFromDoc from "@/helpers/userResponseShapeFromDoc";
 export default async function loginService(credentials: LoginType) {
   const envs = getEnv();
   const { email, password } = credentials;
@@ -59,29 +59,7 @@ export default async function loginService(credentials: LoginType) {
   // save user
   await user.save();
 
-  const userResponseDto: UserResponseType = {
-    id: user._id.toString(),
-    username: user.username,
-    email: user.email,
-    role: user.role,
-    avatar: user.avatar,
-    nationality: user.nationality,
-    phoneNumber: user.phoneNumber,
-    ownerInfo: user.ownerInfo
-      ? {
-          firstName: user.ownerInfo.firstName,
-          lastName: user.ownerInfo.lastName,
-          nationalNumber: user.ownerInfo.nationalNumber,
-          dateOfBirth: user.ownerInfo.dateOfBirth,
-          address: user.ownerInfo.address,
-          cardImgInfo: { img_url: user.ownerInfo.cardImgInfo.img_url },
-          applicationStatus: user.ownerInfo.applicationStatus,
-          rejectionNote: user.ownerInfo.rejectionNote,
-          adminReviewedAt: user.ownerInfo.adminReviewedAt,
-          payoutsEnabled: user.ownerInfo.payoutsEnabled,
-        }
-      : undefined,
-  };
+  const userResponseDto = userResponseShapeFromDoc(user);
 
   return { user: userResponseDto, accessToken, refreshToken };
 }
