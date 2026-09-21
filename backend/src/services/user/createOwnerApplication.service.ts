@@ -3,7 +3,7 @@ import ApiError from "@lankaStay/shared/utils/ApiError";
 import { ERROR_CODES } from "@lankaStay/shared/consts/errorCodes";
 import { OwnerApplicationType } from "@lankaStay/shared/schemes/user/ownerApplicationSchema";
 import { APPLICATION_STATUS } from "@lankaStay/shared/consts/applicationStatus";
-export default async function becomeOwnerService(
+export default async function createOwnerApplicationService(
   user: UserDoc,
   ownerApplicationData: OwnerApplicationType,
 ) {

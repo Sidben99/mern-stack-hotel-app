@@ -10,7 +10,7 @@ import {
   APPLICATION_STATUS,
 } from "@lankaStay/shared/consts/applicationStatus.ts";
 const api = supertest(app);
-const endpoint = "/api/user/become-owner";
+const endpoint = "/api/user/owner-application";
 const cardImgPath = path.resolve(
   import.meta.dirname,
   "216-2164843_passport-png-free-download-passport-icon-png.webp",
@@ -25,7 +25,7 @@ const applicationData = {
   dateOfBirth: "1990-01-01",
 };
 
-describe("POST /api/user/become-owner", () => {
+describe("POST /api/user/owner-application", () => {
   it("should return 401 for unauthenticated user", async () => {
     const response = await api.post(endpoint).send({});
     expect(response.status).toBe(401);
