@@ -8,11 +8,23 @@ import ProtectedRoute from './components/protectedRoute';
 import RefreshTokenProvider from './components/refreshTokenProvider';
 import Layout from './components/layout/layout';
 import ResetPassword from './pages/auth/reset-password';
+import OwnerApplication from './pages/owner-application';
+import OwnerApplicationStatus from './pages/owner-application/status';
+import OwnerApplicationForm from './pages/owner-application/application-form';
 const routesConfig = createRoutesFromElements(
   <Route path="/" element={<Layout></Layout>} errorElement={<ErrorPage />}>
     <Route element={<RefreshTokenProvider />}>
       <Route index element={<Index></Index>}></Route>
-      <Route element={<ProtectedRoute />}>
+      <Route element={<ProtectedRoute roles={['user']} />}>
+        <Route path="/owner-application" element={<OwnerApplication></OwnerApplication>}>
+          <Route index element={<OwnerApplicationStatus></OwnerApplicationStatus>}></Route>
+          <Route
+            path="apply"
+            element={<OwnerApplicationForm></OwnerApplicationForm>}
+          ></Route>
+        </Route>
+      </Route>
+      <Route element={<ProtectedRoute roles={['admin']} />}>
         <Route path="/dashboard" element={<Index></Index>}></Route>
       </Route>
     </Route>
