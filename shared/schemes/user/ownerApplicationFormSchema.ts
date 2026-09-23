@@ -22,22 +22,36 @@ export const ownerApplicationFormSchema = z.object({
     .min(6, "national number must be at least 6 characters long")
     .max(20, "national number must be at most 20 characters long"),
 
-  dateOfBirth: z.coerce.date("date of birth is required").refine(isAdult, {
-    error: "you must be at least 18 years old",
-  }),
-  address: z.string("address is required"),
+  dateOfBirth: z.coerce
+    .date<string>("date of birth is required")
+    .refine(isAdult, {
+      error: "you must be at least 18 years old",
+    }),
+  address: z
+    .string("address is required")
+    .min(2, "address must be at least 2 characters long")
+    .max(50, "address must be at most 500 characters long"),
   cardImg: z
-    .custom<File>((img) => img instanceof File)
-    .refine(
-      (img) => img.size <= 5 * 1024 * 1024,
-      "card image must be less than 5MB",
-    )
-    .refine(
-      (img) => ACCEPTED_IMG_TYPE.includes(img.type),
-      "unsupported image format",
-    ),
+    .custom<FileList>()
+    .transform((imgs) => imgs[0])
+    .refine((img) => img instanceof File, {
+      error: "card image is required",
+      abort: true,
+    })
+    .refine((img) => img.size <= 5 * 1024 * 1024, {
+      error: "card image must be less than 5MB",
+      abort: true,
+    })
+    .refine((img) => ACCEPTED_IMG_TYPE.includes(img.type), {
+      error: "unsupported image format",
+      abort: true,
+    }),
 });
 
-export type OwnerApplicationFormType = z.infer<
+export type OwnerApplicationFormOutput = z.output<
+  typeof ownerApplicationFormSchema
+>;
+
+export type OwnerApplicationFormInput = z.input<
   typeof ownerApplicationFormSchema
 >;
