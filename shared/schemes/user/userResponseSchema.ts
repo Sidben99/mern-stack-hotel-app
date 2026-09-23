@@ -15,5 +15,7 @@ export const userResponseSchema = userSchema.omit({ password: true }).extend({
   ownerInfo: ownerInfoResponseSchema.optional(),
 });
 
+export type OwnerInfoResponseType = z.infer<typeof ownerInfoResponseSchema>;
+
 type UserResponseType = z.infer<typeof userResponseSchema>;
 export type { UserResponseType };
