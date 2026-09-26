@@ -1,4 +1,5 @@
 import { Clock1, CircleX } from 'lucide-react';
+import { useOutletContext } from 'react-router-dom';
 import {
   Card,
   CardContent,
@@ -11,6 +12,8 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import InfoRow from './info-row';
 import type { OwnerInfoResponseType } from '@lankaStay/shared/schemes/user/userResponseSchema';
+import useCancelOwnerApplication from '@/hooks/owner-application/useCancelOwnerApplication';
+import type { OwnerApplicationContext } from './index';
 
 type ApplicationField = {
   key: keyof OwnerInfoResponseType;
@@ -40,6 +43,9 @@ export default function PendingStatusCard({
 }: {
   ownerInfoFromResponse: OwnerInfoResponseType;
 }) {
+  const { isPending, mutate } = useCancelOwnerApplication();
+  const { authState, setAuthState } =
+    useOutletContext<OwnerApplicationContext>();
   return (
     <Card className="max-w-3xl text-center flex flex-col align-center w-full m-auto">
       <CardHeader>
@@ -77,6 +83,17 @@ export default function PendingStatusCard({
         <Button
           variant={'outline'}
           className="text-destructive border-destructive hover:bg-destructive hover:text-destructive-foreground"
+          onClick={() =>
+            mutate(undefined, {
+              onSuccess(response) {
+                setAuthState({
+                  accessToken: authState.accessToken,
+                  user: response.data.user,
+                });
+              },
+            })
+          }
+          disabled={isPending}
         >
           {' '}
           <CircleX size={16}></CircleX>cancel application

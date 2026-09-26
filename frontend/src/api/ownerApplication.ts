@@ -1,9 +1,8 @@
 import { type OwnerApplicationFormOutput } from '@lankaStay/shared/schemes/user/ownerApplicationFormSchema';
-import fetchWrapper from './fetchWrapper';
+import fetchWithAuthWrapper from './fetchWithAuthWrapper';
 import type { UserResponseType } from '@lankaStay/shared/schemes/user/userResponseSchema';
 export function createOwnerApplication(
   application: OwnerApplicationFormOutput,
-  accessToken: string,
 ) {
   const formData = new FormData();
   const applicationData = {
@@ -14,15 +13,21 @@ export function createOwnerApplication(
     formData.append(key, value);
   }
 
-  return fetchWrapper<{ user: UserResponseType }>(
+  return fetchWithAuthWrapper<{ user: UserResponseType }>(
     'http://localhost:5000/api/user/owner-application',
     {
       method: 'POST',
       credentials: 'include',
       body: formData,
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+    },
+  );
+}
+export function cancelOwnerApplication() {
+  return fetchWithAuthWrapper<{ user: UserResponseType }>(
+    'http://localhost:5000/api/user/owner-application/cancel',
+    {
+      method: 'POST',
+      credentials: 'include',
     },
   );
 }

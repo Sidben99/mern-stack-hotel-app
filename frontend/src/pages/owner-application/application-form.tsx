@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useOutletContext } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Field, FieldLabel, FieldError } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
@@ -11,10 +11,12 @@ import {
   type OwnerApplicationFormOutput,
 } from '@lankaStay/shared/schemes/user/ownerApplicationFormSchema';
 import background from '../../assets/image 5.png';
-import { useUserStore } from '@/store/userStore';
+import type { OwnerApplicationContext } from './index';
 import useCreateOwnerApplication from '@/hooks/owner-application/useCreateOwnerApplication';
 export default function OwnerApplicationForm() {
   const { isPending, mutate } = useCreateOwnerApplication();
+  const { authState, setAuthState } =
+    useOutletContext<OwnerApplicationContext>();
   const { register, formState, handleSubmit } = useForm<
     OwnerApplicationFormInput,
     undefined,
@@ -22,8 +24,6 @@ export default function OwnerApplicationForm() {
   >({
     resolver: zodResolver(ownerApplicationFormSchema),
   });
-  const setAuthState = useUserStore((state) => state.setAuthState);
-  const authState = useUserStore((state) => state.authState);
   const navigate = useNavigate();
   return (
     <div className="form-container grid grid-cols-1 md:grid-cols-2 flex-1">
@@ -37,13 +37,12 @@ export default function OwnerApplicationForm() {
           className="py-10 px-2.5 "
           noValidate
           onSubmit={handleSubmit((applicationData) => {
-            if (!authState) return navigate('/auth/login');
             mutate(
-              { applicationData, accessToken: authState!.accessToken },
+              { applicationData },
               {
                 onSuccess(response) {
                   setAuthState({
-                    accessToken: useUserStore.getState().authState!.accessToken,
+                    accessToken: authState.accessToken,
                     user: response.data.user,
                   });
                   navigate('/owner-application', { replace: true });

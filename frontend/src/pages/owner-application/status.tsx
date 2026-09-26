@@ -1,11 +1,10 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate, useOutletContext } from 'react-router-dom';
 import { APPLICATION_STATUS } from '@lankaStay/shared/consts/applicationStatus';
 import PendingStatusCard from './pending-status-card';
 import RejectedStatusCard from './rejected-status-card';
-import { useUserStore } from '@/store/userStore';
+import type { OwnerApplicationContext } from './index';
 export default function OwnerApplicationStatus() {
-  const authState = useUserStore((state) => state.authState);
-  if (!authState) return <Navigate to="/auth/login" replace />;
+  const { authState } = useOutletContext<OwnerApplicationContext>();
   const ownerInfo = authState.user.ownerInfo;
   if (!ownerInfo) return <Navigate to="./apply" replace />;
   switch (ownerInfo.applicationStatus) {
