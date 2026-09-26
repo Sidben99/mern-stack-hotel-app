@@ -4,8 +4,6 @@ import type {
   ApiResponseData,
   ApiResponseMessage,
 } from '@lankaStay/shared/utils/ApiResponse';
-import { refreshAccessToken } from './auth';
-import { useUserStore } from '@/store/userStore.ts';
 export default async function fetchWrapper<T = null>(
   url: string,
   options: RequestInit,
@@ -21,34 +19,6 @@ export default async function fetchWrapper<T = null>(
   } catch (fetchError) {
     console.log('fetchError : ', fetchError);
     if (fetchError instanceof ApiError) {
-      if (fetchError.code === ERROR_CODES.ACCESS_TOKEN_EXPIRED) {
-        try {
-          const refreshTokenResponse = await refreshAccessToken();
-          const { accessToken, user } = refreshTokenResponse.data;
-          console.log('new accessToken : ', accessToken);
-          useUserStore.setState({ authState: { user, accessToken } });
-          return fetchWrapper<T>(url, {
-            ...options,
-            headers: {
-              ...options.headers,
-              Authorization: `Bearer ${accessToken}`,
-            },
-          });
-        } catch (refetchError) {
-          if (refetchError instanceof ApiError) {
-            console.log('refetchError : ', refetchError);
-            if (
-              refetchError.code === ERROR_CODES.REFRESH_TOKEN_EXPIRED ||
-              refetchError.code === ERROR_CODES.INVALID_REFRESH_TOKEN ||
-              refetchError.code === ERROR_CODES.UNAUTHORIZED
-            ) {
-              window.location.href = '/auth/login';
-            }
-          }
-
-          throw refetchError;
-        }
-      }
       throw fetchError;
     } else if (fetchError instanceof TypeError) {
       throw new ApiError(
