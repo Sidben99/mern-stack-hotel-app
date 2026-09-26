@@ -4,6 +4,7 @@ type AuthState = {
   user: UserResponseType;
   accessToken: string;
 };
+export type { AuthState };
 type UserStore = {
   authState: AuthState | null;
   setAuthState: (newAuthState: AuthState | null) => void;
