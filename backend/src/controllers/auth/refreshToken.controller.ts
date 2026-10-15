@@ -10,9 +10,8 @@ export default async function refreshTokenController(
   const refreshToken = req.cookies?.refreshToken;
   if (!refreshToken)
     throw new ApiError(401, "unauthorized user", ERROR_CODES.UNAUTHORIZED);
-  const { accessToken, user } = await refreshTokenService(refreshToken);
+  const { accessToken } = await refreshTokenService(refreshToken);
   return successDataResponse(res, 201, "token refreshed successfully", {
     accessToken,
-    user,
   });
 }

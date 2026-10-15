@@ -37,11 +37,9 @@ describe("POST /api/auth/refresh-token", () => {
     await registerTestUser(api);
     const refreshRes = await api.post(path);
     const refreshResBody = refreshRes.body as ApiResponse<{
-      user: UserResponseType;
       accessToken: string;
     }>;
     expect(refreshRes.status).toBe(201);
     expect(refreshResBody.data.accessToken).toBeDefined();
-    expect(refreshResBody.data.user).toBeDefined();
   });
 });

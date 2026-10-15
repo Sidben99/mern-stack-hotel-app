@@ -27,7 +27,6 @@ export default async function refreshTokenService(refreshToken: string) {
     envs.ACCESS_TOKEN_SECRET,
     envs.ACCESS_TOKEN_LIFETIME,
   );
-  const userResponseDto = userResponseShapeFromDoc(user);
 
-  return { user: userResponseDto, accessToken };
+  return { accessToken };
 }
