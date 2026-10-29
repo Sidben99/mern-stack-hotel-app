@@ -10,24 +10,27 @@ export default async function fetchWrapper<T = null>(
 ): Promise<T extends null ? ApiResponseMessage : ApiResponseData<T>> {
   try {
     // await new Promise((resolve) => setTimeout(resolve, 2000));
-    const res = await fetch(url, options);
+    let res;
+    try {
+      res = await fetch(url, options);
+    } catch (error) {
+      throw new ApiError(
+        0,
+        'unable to reach server',
+        ERROR_CODES.NETWORK_ERROR,
+      );
+    }
     const data = await res.json();
     if (!res.ok) {
-      throw new ApiError(data.status, data.message, data.code, data.details);
+      throw new ApiError(res.status, data.message, data.code, data.details);
     }
     return data;
   } catch (fetchError) {
     console.log('fetchError : ', fetchError);
     if (fetchError instanceof ApiError) {
       throw fetchError;
-    } else if (fetchError instanceof TypeError) {
-      throw new ApiError(
-        0,
-        'unable to reach server , please try again',
-        ERROR_CODES.FETCH_FAILED,
-      );
     } else {
-      throw new ApiError(0, 'something went wrong', ERROR_CODES.FETCH_FAILED);
+      throw new ApiError(0, 'something went wrong', ERROR_CODES.UNKNOWN_ERROR);
     }
   }
 }

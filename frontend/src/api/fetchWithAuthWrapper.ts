@@ -5,18 +5,17 @@ import type {
   ApiResponseMessage,
 } from '@lankaStay/shared/utils/ApiResponse';
 import { refreshAccessToken } from './auth';
-import { useUserStore } from '@/store/userStore.ts';
+import useAccessTokenStore from '@/store/accessTokenStore';
 export default async function fetchWithAuthWrapper<T = null>(
   url: string,
   options: RequestInit,
 ): Promise<T extends null ? ApiResponseMessage : ApiResponseData<T>> {
   try {
     // await new Promise((resolve) => setTimeout(resolve, 2000));
-    const accessToken = useUserStore.getState().authState?.accessToken;
+    const accessToken = useAccessTokenStore.getState().accessToken;
     const headers = new Headers(options.headers);
     if (!headers.has('authorization')) {
       if (!accessToken) {
-        window.location.href = '/auth/login';
         throw new ApiError(
           401,
           'You need to log in to do that',
@@ -25,50 +24,37 @@ export default async function fetchWithAuthWrapper<T = null>(
       }
       headers.set('authorization', `Bearer ${accessToken}`);
     }
-    const fetchOptions = { ...options, headers };
-    const res = await fetch(url, fetchOptions);
+    const fetchOptions = { ...options, headers, credientials: 'include' };
+    let res;
+    try {
+      res = await fetch(url, fetchOptions);
+    } catch (error) {
+      throw new ApiError(
+        0,
+        'unable to reach server',
+        ERROR_CODES.NETWORK_ERROR,
+      );
+    }
     const data = await res.json();
     if (!res.ok) {
-      throw new ApiError(data.status, data.message, data.code, data.details);
+      throw new ApiError(res.status, data.message, data.code, data.details);
     }
     return data;
   } catch (fetchError) {
     console.log('fetchError : ', fetchError);
     if (fetchError instanceof ApiError) {
       if (fetchError.code === ERROR_CODES.ACCESS_TOKEN_EXPIRED) {
-        try {
-          const refreshTokenResponse = await refreshAccessToken();
-          const { accessToken, user } = refreshTokenResponse.data;
-          console.log('new accessToken : ', accessToken);
-          useUserStore.setState({ authState: { user, accessToken } });
-          const headers = new Headers(options.headers);
-          headers.set('authorization', `Bearer ${accessToken}`);
-          const fetchOptions = { ...options, headers };
-          return fetchWithAuthWrapper<T>(url, fetchOptions);
-        } catch (refetchError) {
-          if (refetchError instanceof ApiError) {
-            console.log('refetchError : ', refetchError);
-            if (
-              refetchError.code === ERROR_CODES.REFRESH_TOKEN_EXPIRED ||
-              refetchError.code === ERROR_CODES.INVALID_REFRESH_TOKEN ||
-              refetchError.code === ERROR_CODES.UNAUTHORIZED
-            ) {
-              window.location.href = '/auth/login';
-            }
-          }
-
-          throw refetchError;
-        }
+        const refreshTokenResponse = await refreshAccessToken();
+        const { accessToken } = refreshTokenResponse.data;
+        useAccessTokenStore.setState({ accessToken });
+        const headers = new Headers(options.headers);
+        headers.set('authorization', `Bearer ${accessToken}`);
+        const fetchOptions = { ...options, headers };
+        return fetchWithAuthWrapper<T>(url, fetchOptions);
       }
       throw fetchError;
-    } else if (fetchError instanceof TypeError) {
-      throw new ApiError(
-        0,
-        'unable to reach server , please try again',
-        ERROR_CODES.FETCH_FAILED,
-      );
     } else {
-      throw new ApiError(0, 'something went wrong', ERROR_CODES.FETCH_FAILED);
+      throw new ApiError(0, 'something went wrong', ERROR_CODES.UNKNOWN_ERROR);
     }
   }
 }
